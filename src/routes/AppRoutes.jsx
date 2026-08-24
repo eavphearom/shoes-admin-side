@@ -4,6 +4,7 @@ import DashboardPage from "../pages/DashboardPage";
 import NotFoundPage from "../pages/NotFoundPage";
 // import ProtectedRoute from "./ProtectedRoute";
 import AdminLayout from "../components/layout/AdminLayout";
+import CategoryPage from "../pages/CategoryPage";
 
 export default function AppRoutes() {
   return (
@@ -14,7 +15,8 @@ export default function AppRoutes() {
       {/* Protected */}
       {/* <Route element={<ProtectedRoute />}> */}
         <Route element={<AdminLayout />}>
-          <Route index="/dashboard" element={<DashboardPage />} />
+          <Route index="/" element={<DashboardPage />} />
+          <Route path="/category" element={<CategoryPage />} />
         </Route>
       {/* </Route> */}
 

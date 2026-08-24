@@ -10,11 +10,18 @@ export default function Sidebar() {
 
       <nav>
         <NavLink
-          to="/dashboard"
+          to="/"
           className="flex items-center gap-2 rounded-lg px-3 py-2"
         >
           <LayoutDashboard size={20} />
           Dashboard
+        </NavLink>
+        <NavLink
+          to="/category"
+          className="flex items-center gap-2 rounded-lg px-3 py-2"
+        >
+          <LayoutDashboard size={20} />
+          Category
         </NavLink>
       </nav>
     </aside>
