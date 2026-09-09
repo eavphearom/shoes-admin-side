@@ -4,7 +4,8 @@ import Input from "../../../components/ui/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { categorySchema } from "../schemas/categorySchema";
 import { useEffect } from "react";
-import Select from "../../../components/ui/Select";
+
+
 export default function CategoryForm({ category = null, onSubmit }) {
   const {
     register,
@@ -33,12 +34,6 @@ export default function CategoryForm({ category = null, onSubmit }) {
     }
   }, [category, reset]);
 
-  // const categoryOptions = [
-  //   { value: "electronics", label: "Electronics" },
-  //   { value: "fashion", label: "Fashion" },
-  //   { value: "home", label: "Home" },
-  //   { value: "books", label: "Books" },
-  // ];
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <Input
@@ -47,11 +42,8 @@ export default function CategoryForm({ category = null, onSubmit }) {
         error={errors.name?.message}
         {...register("name")}
       />
-      {/* <Select
-        label="Category"
-        options={categoryOptions}
-        placeholder="Select category"
-      /> */}
+
+      
       <div>
         <label className="mb-1 block text-sm font-medium">Description</label>
 
@@ -68,9 +60,11 @@ export default function CategoryForm({ category = null, onSubmit }) {
         )}
       </div>
 
-      <Button type="submit" loading={isSubmitting}>
-        Save Category
-      </Button>
+      <div className="flex justify-end">
+        <Button type="submit" loading={isSubmitting}>
+          Save Category
+        </Button>
+      </div>
     </form>
   );
 }

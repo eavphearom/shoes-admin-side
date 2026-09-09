@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Plus } from "lucide-react";
 
 import CategoryList from "../features/categories/components/CategoryList";
 import CategoryForm from "../features/categories/components/CategoryForm";
@@ -16,6 +17,10 @@ export default function CategoryListPage() {
     page,
     setPage,
     totalPages,
+    totalItems,
+    startIndex,
+    perPage,
+    handlePerPageChange,
     addCategory,
     updateCategory,
     deleteCategory,
@@ -56,12 +61,22 @@ export default function CategoryListPage() {
     setSelectedCategory(null);
   };
   return (
-    <div>
+    <div className="space-y-5">
       {/* Page header */}
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Categories</h1>
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+        <div>
+          <h1 className="text-[28px] font-bold tracking-tight text-[#03152B]">
+            Categories
+          </h1>
+          <p className="mt-1 text-sm text-[#64748B]">
+            Manage your product categories
+          </p>
+        </div>
 
-        <Button onClick={() => setIsCreateOpen(true)}>Add Category</Button>
+        <Button onClick={() => setIsCreateOpen(true)} className="gap-2">
+          <Plus size={16} />
+          Add Category
+        </Button>
       </div>
 
       {/* Category listing */}
@@ -73,6 +88,10 @@ export default function CategoryListPage() {
         onSearch={handleSearch}
         page={page}
         totalPages={totalPages}
+        totalItems={totalItems}
+        startIndex={startIndex}
+        perPage={perPage}
+        handlePerPageChange={handlePerPageChange}
         onPageChange={setPage}
       />
 
@@ -81,6 +100,7 @@ export default function CategoryListPage() {
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
         title="Create Category"
+        size="md"
       >
         <CategoryForm onSubmit={handleCreate} />
       </Modal>
@@ -89,6 +109,7 @@ export default function CategoryListPage() {
         isOpen={isEditOpen}
         onClose={() => setIsEditOpen(false)}
         title="Edit Category"
+        size="md"
       >
         <CategoryForm category={selectedCategory} onSubmit={handleUpdate} />
       </Modal>

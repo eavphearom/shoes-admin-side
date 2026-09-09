@@ -4,8 +4,7 @@ import { useState } from "react";
 export default function useCategories() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-
-  const perPage = 2;
+  const [perPage, setPerPage] = useState(10);
 
   // Mock data - replace with API later
 
@@ -14,36 +13,50 @@ export default function useCategories() {
       id: 1,
       name: "Electronics",
       description: "Electronic products",
+      status: "Active",
+      createdAt: "Oct 24, 2023",
     },
     {
       id: 2,
       name: "Accessories",
       description: "Product accessories",
+      status: "Active",
+      createdAt: "Oct 20, 2023",
     },
     {
       id: 3,
       name: "Clothing",
       description: "Fashion and clothing",
+      status: "Inactive",
+      createdAt: "Oct 15, 2023",
     },
     {
       id: 4,
       name: "Shoes",
       description: "Shoes products",
+      status: "Active",
+      createdAt: "Oct 12, 2023",
     },
     {
       id: 5,
       name: "Phones",
       description: "Mobile phones",
+      status: "Inactive",
+      createdAt: "Oct 10, 2023",
     },
     {
       id: 6,
       name: "Computers",
       description: "Computer products",
+      status: "Active",
+      createdAt: "Oct 04, 2023",
     },
   ]);
   const addCategory = (data) => {
     const newCategory = {
       id: Date.now(),
+      status: "Active",
+      createdAt: "Today",
       ...data,
     };
 
@@ -82,6 +95,11 @@ export default function useCategories() {
     setPage(1);
   };
 
+  const handlePerPageChange = (value) => {
+    setPerPage(Number(value));
+    setPage(1);
+  };
+
   return {
     categories: paginatedCategories,
     search,
@@ -89,8 +107,12 @@ export default function useCategories() {
     page,
     setPage,
     totalPages,
+    totalItems: filteredCategories.length,
+    startIndex,
+    perPage,
+    handlePerPageChange,
     addCategory,
     deleteCategory,
-    updateCategory  
+    updateCategory,
   };
 }

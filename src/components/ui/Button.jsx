@@ -9,9 +9,10 @@ export default function Button({
   
 }) {
   const variants = {
-    primary: "bg-blue-600 text-white hover:bg-blue-700",
-    secondary: "bg-gray-200 text-gray-800 hover:bg-gray-300",
-    warning: "bg-yellow-200 text-yellow-800 hover:bg-yellow-300",
+    primary: "bg-[#2E7AF0] text-white hover:bg-[#1F66D8]",
+    secondary:
+      "border border-[#D7DFEA] bg-white text-[#03152B] hover:bg-[#F7F9FC]",
+    warning: "bg-amber-50 text-amber-700 hover:bg-amber-100",
     danger: "bg-red-600 text-white hover:bg-red-700",
   };
 
@@ -21,7 +22,7 @@ export default function Button({
       onClick={onClick}
       disabled={disabled || loading}
       className={`
-        rounded-lg px-4 py-2 font-medium
+        inline-flex items-center cursor-pointer justify-center rounded-lg px-4 py-2 text-sm font-semibold
         transition
         disabled:cursor-not-allowed disabled:opacity-50
         ${variants[variant]}
