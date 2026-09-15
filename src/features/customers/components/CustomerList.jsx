@@ -56,7 +56,7 @@ function StatusBadge({ status }) {
 }
 
 function Actions({ item, onEdit, onDelete }) {
-  return <div className="flex justify-end gap-1"><button type="button" onClick={() => onEdit(item)} className="cursor-pointer rounded-lg p-2 text-[#64748B] hover:bg-[#EAF1FF] hover:text-[#2E7AF0]" aria-label={`Edit ${item.name}`}><Edit2 size={15} /></button><button type="button" onClick={() => onDelete(item)} className="cursor-pointer rounded-lg p-2 text-[#64748B] hover:bg-red-50 hover:text-red-600" aria-label={`Delete ${item.name}`}><Trash2 size={15} /></button></div>;
+  return <div className="flex justify-end gap-1"><button type="button" onClick={() => onEdit(item)} className="cursor-pointer rounded-lg p-2 text-[#64748B] hover:bg-[#FFF7ED] hover:text-[#F97316]" aria-label={`Edit ${item.name}`}><Edit2 size={15} /></button><button type="button" onClick={() => onDelete(item)} className="cursor-pointer rounded-lg p-2 text-[#64748B] hover:bg-red-50 hover:text-red-600" aria-label={`Delete ${item.name}`}><Trash2 size={15} /></button></div>;
 }
 
 function Footer(props) {

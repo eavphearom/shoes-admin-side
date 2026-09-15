@@ -90,7 +90,7 @@ export default function CategoryList({
               <th className="w-12 px-4 py-3">
                 <input
                   type="checkbox"
-                  className="h-4 w-4 rounded border-[#CBD5E1] text-[#2E7AF0]"
+                  className="h-4 w-4 rounded border-[#CBD5E1] text-[#F97316]"
                   aria-label="Select all categories"
                 />
               </th>
@@ -115,7 +115,7 @@ export default function CategoryList({
                   <td className="px-4 py-3">
                     <input
                       type="checkbox"
-                      className="h-4 w-4 rounded border-[#CBD5E1] text-[#2E7AF0]"
+                      className="h-4 w-4 rounded border-[#CBD5E1] text-[#F97316]"
                       aria-label={`Select ${category.name}`}
                     />
                   </td>
@@ -149,7 +149,7 @@ export default function CategoryList({
                       <button
                         type="button"
                         onClick={() => onEdit(category)}
-                        className="rounded-lg p-2 text-[#64748B] cursor-pointer transition hover:bg-[#EAF1FF] hover:text-[#2E7AF0]"
+                        className="rounded-lg p-2 text-[#64748B] cursor-pointer transition hover:bg-[#FFF7ED] hover:text-[#F97316]"
                         aria-label={`Edit ${category.name}`}
                       >
                         <Edit2 size={15} />

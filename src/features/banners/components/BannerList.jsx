@@ -1,11 +1,15 @@
 import { Edit2, Image, Search, Trash2 } from "lucide-react";
 import Input from "../../../components/ui/Input";
+import Select from "../../../components/ui/Select";
 import TablePagination from "../../../components/ui/TablePagination";
 
-export default function BrandList({
-  brands,
+export default function BannerList({
+  banners,
   search,
   onSearch,
+  statusFilter,
+  onStatusFilter,
+  statusOptions,
   page,
   totalPages,
   totalItems,
@@ -23,67 +27,83 @@ export default function BrandList({
   return (
     <div className="rounded-lg border border-[#D7DFEA] bg-white shadow-sm">
       <div className="border-b border-[#E5EAF1] p-4">
-        <div className="relative w-full sm:w-72">
-          <Search
-            size={16}
-            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#8A98AA]"
-          />
-          <Input
-            placeholder="Search brand..."
-            value={search}
-            onChange={(e) => onSearch(e.target.value)}
-            className="h-9 pl-9"
-          />
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="relative w-full sm:w-72">
+            <Search
+              size={16}
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#8A98AA]"
+            />
+            <Input
+              placeholder="Search banner..."
+              value={search}
+              onChange={(e) => onSearch(e.target.value)}
+              className="h-9 pl-9"
+            />
+          </div>
+
+          <div className="w-full sm:w-44">
+            <Select
+              value={statusFilter}
+              onChange={(e) => onStatusFilter(e.target.value)}
+              options={statusOptions}
+              placeholder="All Statuses"
+            />
+          </div>
         </div>
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[760px]">
+        <table className="w-full min-w-[860px]">
           <thead>
             <tr className="border-b border-[#E5EAF1] bg-[#F8FAFD] text-left text-[11px] font-semibold uppercase tracking-wide text-[#64748B]">
               <th className="w-12 px-4 py-3">
-                <input type="checkbox" aria-label="Select all brands" />
+                <input type="checkbox" aria-label="Select all banners" />
               </th>
               <th className="w-16 px-4 py-3">#</th>
-              <th className="px-4 py-3">Logo</th>
-              <th className="px-4 py-3">Brand Name</th>
-              <th className="px-4 py-3">Description</th>
+              <th className="px-4 py-3">Image</th>
+              <th className="px-4 py-3">Title</th>
+              <th className="px-4 py-3">Placement</th>
+              <th className="px-4 py-3">Link</th>
               <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3">Created Date</th>
               <th className="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {brands.map((brand, index) => (
+            {banners.map((banner, index) => (
               <tr
-                key={brand.id}
+                key={banner.id}
                 className="border-b border-[#EEF2F7] text-sm transition last:border-0 hover:bg-[#F8FAFD]"
               >
                 <td className="px-4 py-3">
-                  <input type="checkbox" aria-label={`Select ${brand.name}`} />
+                  <input type="checkbox" aria-label={`Select ${banner.title}`} />
                 </td>
                 <td className="px-4 py-3 text-[#64748B]">
                   {startIndex + index + 1}
                 </td>
                 <td className="px-4 py-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#FFF7ED] text-[#F97316]">
-                    <Image size={17} />
+                  <div className="flex h-12 w-20 items-center justify-center rounded-lg bg-[#FFF7ED] text-[#F97316]">
+                    <Image size={18} />
                   </div>
                 </td>
-                <td className="px-4 py-3 font-semibold text-[#03152B]">
-                  {brand.name}
+                <td className="px-4 py-3">
+                  <p className="font-semibold text-[#03152B]">{banner.title}</p>
+                  <p className="mt-1 max-w-xs truncate text-xs text-[#64748B]">
+                    {banner.subtitle || "-"}
+                  </p>
                 </td>
                 <td className="px-4 py-3 text-[#64748B]">
-                  {brand.description || "-"}
+                  {banner.placement}
                 </td>
+                <td className="px-4 py-3 text-[#64748B]">{banner.link || "-"}</td>
                 <td className="px-4 py-3">
-                  <StatusBadge status={brand.status} />
+                  <StatusBadge status={banner.status} />
                 </td>
                 <td className="px-4 py-3 text-[#64748B]">
-                  {brand.createdAt}
+                  {banner.createdAt}
                 </td>
                 <td className="px-4 py-3">
-                  <Actions item={brand} onEdit={onEdit} onDelete={onDelete} />
+                  <Actions item={banner} onEdit={onEdit} onDelete={onDelete} />
                 </td>
               </tr>
             ))}
@@ -95,7 +115,7 @@ export default function BrandList({
         firstItem={firstItem}
         lastItem={lastItem}
         totalItems={totalItems}
-        label="brands"
+        label="banners"
         page={page}
         pages={pages}
         totalPages={totalPages}
@@ -128,7 +148,7 @@ function Actions({ item, onEdit, onDelete }) {
         type="button"
         onClick={() => onEdit(item)}
         className="cursor-pointer rounded-lg p-2 text-[#64748B] transition hover:bg-[#FFF7ED] hover:text-[#F97316]"
-        aria-label={`Edit ${item.name}`}
+        aria-label={`Edit ${item.title}`}
       >
         <Edit2 size={15} />
       </button>
@@ -136,7 +156,7 @@ function Actions({ item, onEdit, onDelete }) {
         type="button"
         onClick={() => onDelete(item)}
         className="cursor-pointer rounded-lg p-2 text-[#64748B] transition hover:bg-red-50 hover:text-red-600"
-        aria-label={`Delete ${item.name}`}
+        aria-label={`Delete ${item.title}`}
       >
         <Trash2 size={15} />
       </button>
@@ -144,8 +164,6 @@ function Actions({ item, onEdit, onDelete }) {
   );
 }
 
-function Footer({
-  ...props
-}) {
+function Footer(props) {
   return <TablePagination {...props} />;
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
+  ArrowLeft,
   Eye,
   EyeOff,
   LockKeyhole,
@@ -10,6 +11,36 @@ import {
 import googleIcon from "../../../assets/google.png";
 import Button from "../../../components/ui/Button";
 import { useAuth } from "../hooks/useAuth";
+
+function AuthInput({
+  label,
+  icon: Icon,
+  type = "text",
+  rightControl,
+  className = "",
+  ...props
+}) {
+  return (
+    <div>
+      <label className="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-[#07182E]">
+        {label}
+      </label>
+
+      <div className="relative">
+        <Icon
+          size={17}
+          className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#94A3B8]"
+        />
+        <input
+          type={type}
+          className={`h-12 w-full rounded-xl border border-[#D7DFEA] bg-[#FBFCFE] pl-11 pr-4 text-sm font-semibold text-[#07182E] outline-none transition placeholder:font-medium placeholder:text-[#94A3B8] focus:border-[#F97316] focus:bg-white focus:ring-4 focus:ring-[#F97316]/10 ${rightControl ? "pr-11" : ""} ${className}`}
+          {...props}
+        />
+        {rightControl}
+      </div>
+    </div>
+  );
+}
 
 export default function LoginForm() {
   const { login } = useAuth();
@@ -53,85 +84,91 @@ export default function LoginForm() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="w-full max-w-md"
-    >
-      <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold text-[#03152B]">Welcome Back</h1>
+    <div className="w-full max-w-md">
 
-        <p className="mt-2 text-sm text-[#64748B]">
-          Sign in to continue to GPT-Shoes
+      <div className="mb-7 text-center">
+        <p className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-[#E96400]">
+          Welcome Back
+        </p>
+
+        <h1 className="mt-4 text-3xl font-michroma font-bold text-[#07182E]">
+          Sign in
+        </h1>
+
+        <p className="mt-3 text-sm leading-6 text-[#64748B]">
+          Continue to your Go Shoes account.
         </p>
       </div>
 
       {error && (
-        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600">
+        <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-medium text-red-600">
           {error}
         </div>
       )}
 
-      <div className="space-y-4">
-        <div>
-          <label className="mb-1.5 block text-xs font-semibold text-[#03152B]">
-            Email Address
-          </label>
-          <div className="relative">
-            <Mail
-              size={16}
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B]"
-            />
-            <input
-              name="email"
-              type="email"
-              placeholder="Enter your email"
-              value={form.email}
-              onChange={handleChange}
-              className="h-11 w-full rounded-lg border border-[#D7DFEA] bg-white pl-10 pr-3 text-sm text-[#03152B] outline-none transition placeholder:text-[#8A98AA] focus:border-[#2E7AF0] focus:ring-2 focus:ring-[#2E7AF0]/10"
-            />
-          </div>
-        </div>
+      <button
+        type="button"
+        className="flex h-12 w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-[#D7DFEA] bg-white text-sm font-bold text-[#07182E] transition hover:border-[#F97316]/60 hover:bg-[#FFF7ED]"
+      >
+        <img
+          src={googleIcon}
+          alt=""
+          className="h-5 w-5 cursor-pointer object-contain"
+        />
+        Continue with Google
+      </button>
 
-        <div>
-          <label className="mb-1.5 block text-xs font-semibold text-[#03152B]">
-            Password
-          </label>
-          <div className="relative">
-            <LockKeyhole
-              size={16}
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#64748B]"
-            />
-            <input
-              name="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
-              value={form.password}
-              onChange={handleChange}
-              className="h-11 w-full rounded-lg border border-[#D7DFEA] bg-white pl-10 pr-10 text-sm text-[#03152B] outline-none transition placeholder:text-[#8A98AA] focus:border-[#2E7AF0] focus:ring-2 focus:ring-[#2E7AF0]/10"
-            />
+      <div className="my-7 flex items-center gap-4">
+        <div className="h-px flex-1 bg-[#E5EAF1]" />
+        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#94A3B8]">
+          Or login with email
+        </span>
+        <div className="h-px flex-1 bg-[#E5EAF1]" />
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <AuthInput
+          label="Email Address"
+          icon={Mail}
+          name="email"
+          type="email"
+          placeholder="hello@goshoes.com"
+          value={form.email}
+          onChange={handleChange}
+        />
+
+        <AuthInput
+          label="Password"
+          icon={LockKeyhole}
+          name="password"
+          type={showPassword ? "text" : "password"}
+          placeholder="Enter your password"
+          value={form.password}
+          onChange={handleChange}
+          rightControl={
             <button
               type="button"
               onClick={() => setShowPassword((current) => !current)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] transition hover:text-[#03152B]"
+              className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-[#94A3B8] transition hover:text-[#07182E]"
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
-              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
             </button>
-          </div>
-        </div>
+          }
+        />
 
         <div className="flex items-center justify-between text-xs">
-          <label className="flex items-center gap-2 text-[#64748B]">
+          <label className="flex cursor-pointer items-center gap-2 font-semibold text-[#64748B]">
             <input
               type="checkbox"
-              className="h-4 w-4 rounded border-[#CBD5E1] text-[#2E7AF0]"
+              className="h-4 w-4 cursor-pointer rounded border-[#CBD5E1] text-[#F97316] focus:ring-[#F97316]"
             />
             Remember me
           </label>
 
           <button
             type="button"
-            className="font-semibold text-[#2E7AF0] hover:text-[#1F66D8]"
+            className="cursor-pointer font-bold text-[#E96400] transition hover:text-[#C95500]"
           >
             Forgot Password?
           </button>
@@ -140,41 +177,13 @@ export default function LoginForm() {
         <Button
           type="submit"
           loading={loading}
-          className="h-11 w-full bg-[#03152B] hover:bg-[#10243C]"
+          className="h-12 w-full rounded-xl bg-[#E96400] text-sm font-extrabold text-white shadow-[0_14px_28px_rgba(249,115,22,0.24)] hover:bg-[#C95500]"
         >
           Sign In
         </Button>
-      </div>
+      </form>
 
-      <div className="my-7 flex items-center gap-4">
-        <div className="h-px flex-1 bg-[#E5EAF1]" />
-        <span className="text-[11px] font-semibold uppercase text-[#64748B]">
-          Or continue with
-        </span>
-        <div className="h-px flex-1 bg-[#E5EAF1]" />
-      </div>
-
-      <button
-        type="button"
-        className="flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-[#D7DFEA] bg-white text-sm font-semibold text-[#03152B] transition hover:bg-[#F7F9FC]"
-      >
-        <img
-          src={googleIcon}
-          alt=""
-          className="h-5 w-5 cursor-pointer object-contain"
-        />
-        Google
-      </button>
-
-      <p className="mt-7 text-center text-sm text-[#64748B]">
-        Don&apos;t have an account?{" "}
-        <Link
-          to="/register"
-          className="font-semibold text-[#2E7AF0] hover:text-[#1F66D8]"
-        >
-          Create account
-        </Link>
-      </p>
-    </form>
+     
+    </div>
   );
 }

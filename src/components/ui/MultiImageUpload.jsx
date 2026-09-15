@@ -125,15 +125,15 @@ export default function MultiImageUpload({
           }
           ${
             isDragActive
-              ? "border-[#2E7AF0] bg-[#EAF1FF]"
-              : "border-[#CBD5E1] bg-[#F8FAFD] hover:border-[#2E7AF0] hover:bg-[#F4F8FF]"
+              ? "border-[#F97316] bg-[#FFF7ED]"
+              : "border-[#CBD5E1] bg-[#F8FAFD] hover:border-[#F97316] hover:bg-[#F4F8FF]"
           }
         `}
       >
         <input {...getInputProps()} />
 
         <div className="flex flex-col items-center justify-center">
-          <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-white text-[#2E7AF0] shadow-sm ring-1 ring-[#D7E5FF]">
+          <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-white text-[#F97316] shadow-sm ring-1 ring-[#FED7AA]">
             {isDragActive ? (
               <ImagePlus size={18} />
             ) : (
@@ -153,7 +153,7 @@ export default function MultiImageUpload({
             or
           </p>
 
-          <span className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-[#D7DFEA] bg-white px-3 py-1.5 text-xs font-semibold text-[#2E7AF0] shadow-sm">
+          <span className="mt-2 inline-flex items-center gap-1.5 rounded-md border border-[#D7DFEA] bg-white px-3 py-1.5 text-xs font-semibold text-[#F97316] shadow-sm">
             <UploadCloud size={13} />
             Browse Files
           </span>
@@ -187,7 +187,7 @@ export default function MultiImageUpload({
               }}
               className={`group relative aspect-square overflow-hidden rounded-md border bg-white ${
                 enablePrimary && index === primaryIndex
-                  ? "border-[#2E7AF0] ring-1 ring-[#2E7AF0]"
+                  ? "border-[#F97316] ring-1 ring-[#F97316]"
                   : "border-[#D7DFEA]"
               } ${enablePrimary ? "cursor-pointer" : ""}`}
               aria-label={
@@ -213,7 +213,7 @@ export default function MultiImageUpload({
               </button>
 
               {enablePrimary && index === primaryIndex && (
-                <span className="absolute left-1 top-1 rounded bg-[#2E7AF0] px-1.5 py-0.5 text-[10px] font-bold text-white">
+                <span className="absolute left-1 top-1 rounded bg-[#F97316] px-1.5 py-0.5 text-[10px] font-bold text-white">
                   Primary
                 </span>
               )}
@@ -223,7 +223,7 @@ export default function MultiImageUpload({
           {files.length < maxFiles && (
             <div
               {...getRootProps()}
-              className="flex aspect-square cursor-pointer items-center justify-center rounded-md border border-dashed border-[#D7DFEA] bg-white text-[#8A98AA] transition hover:border-[#2E7AF0] hover:bg-[#F4F8FF] hover:text-[#2E7AF0]"
+              className="flex aspect-square cursor-pointer items-center justify-center rounded-md border border-dashed border-[#D7DFEA] bg-white text-[#8A98AA] transition hover:border-[#F97316] hover:bg-[#F4F8FF] hover:text-[#F97316]"
             >
               <input {...getInputProps()} />
               <Plus size={18} />

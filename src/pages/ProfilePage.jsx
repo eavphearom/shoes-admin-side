@@ -37,7 +37,7 @@ export default function ProfilePage() {
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
             <div className="relative">
-              <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-[#EAF1FF] text-2xl font-bold text-[#2E7AF0] ring-4 ring-[#F1F5F9]">
+              <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-[#FFF7ED] text-2xl font-bold text-[#F97316] ring-4 ring-[#F1F5F9]">
                 {displayName
                   .split(" ")
                   .map((name) => name[0])
@@ -60,7 +60,7 @@ export default function ProfilePage() {
               </h2>
               <p className="text-sm text-[#64748B]">{email}</p>
               <div className="mt-2 flex flex-wrap gap-2">
-                <span className="rounded-md bg-[#EAF1FF] px-2 py-1 text-xs font-semibold text-[#2E7AF0]">
+                <span className="rounded-md bg-[#FFF7ED] px-2 py-1 text-xs font-semibold text-[#F97316]">
                   Super Admin
                 </span>
                 <span className="rounded-md bg-[#DCFCE7] px-2 py-1 text-xs font-semibold text-[#15803D]">
@@ -85,7 +85,7 @@ export default function ProfilePage() {
         <aside className="space-y-4">
           <section className="rounded-lg border border-[#D7DFEA] bg-white p-5 shadow-sm">
             <div className="mb-5 flex items-center gap-2">
-              <ShieldCheck size={18} className="text-[#2E7AF0]" />
+              <ShieldCheck size={18} className="text-[#F97316]" />
               <h2 className="text-lg font-bold text-[#03152B]">
                 Account Information
               </h2>
@@ -117,7 +117,7 @@ export default function ProfilePage() {
               Your account has strong protection enabled.
             </p>
             <div className="mt-4 h-2 rounded-full bg-white/10">
-              <div className="h-2 w-[86%] rounded-full bg-[#2E7AF0]" />
+              <div className="h-2 w-[86%] rounded-full bg-[#F97316]" />
             </div>
           </section> */}
         </aside>
@@ -125,7 +125,7 @@ export default function ProfilePage() {
         <div className="space-y-5">
           <section className="rounded-lg border border-[#D7DFEA] bg-white p-5 shadow-sm">
             <div className="mb-5 flex items-center gap-2 border-b border-[#EEF2F7] pb-4">
-              <User size={18} className="text-[#2E7AF0]" />
+              <User size={18} className="text-[#F97316]" />
               <h2 className="text-lg font-bold text-[#03152B]">
                 Personal Information
               </h2>
@@ -202,7 +202,7 @@ function Field({ label, value, icon: Icon, className = "" }) {
         <input
           value={value}
           readOnly
-          className={`h-10 w-full rounded-lg border border-[#D7DFEA] bg-[#F7F9FC] px-3 text-sm text-[#03152B] outline-none transition focus:border-[#2E7AF0] focus:bg-white focus:ring-2 focus:ring-[#2E7AF0]/10 ${
+          className={`h-10 w-full rounded-lg border border-[#D7DFEA] bg-[#F7F9FC] px-3 text-sm text-[#03152B] outline-none transition focus:border-[#F97316] focus:bg-white focus:ring-2 focus:ring-[#F97316]/10 ${
             Icon ? "pl-9" : ""
           }`}
         />
@@ -223,7 +223,7 @@ function PasswordField({ label, value }) {
           value={value}
           readOnly
           placeholder="Enter password"
-          className="h-10 w-full rounded-lg border border-[#D7DFEA] bg-[#F7F9FC] px-3 pr-9 text-sm text-[#03152B] outline-none transition placeholder:text-[#8A98AA] focus:border-[#2E7AF0] focus:bg-white focus:ring-2 focus:ring-[#2E7AF0]/10"
+          className="h-10 w-full rounded-lg border border-[#D7DFEA] bg-[#F7F9FC] px-3 pr-9 text-sm text-[#03152B] outline-none transition placeholder:text-[#8A98AA] focus:border-[#F97316] focus:bg-white focus:ring-2 focus:ring-[#F97316]/10"
         />
         <Eye
           size={15}

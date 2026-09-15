@@ -94,7 +94,7 @@ const MultiSelect = forwardRef(function MultiSelect({
         className={`flex min-h-9 w-full items-center justify-between gap-2 rounded-lg border bg-white px-3 py-1.5 text-left text-sm outline-none transition disabled:cursor-not-allowed disabled:bg-[#F1F5F9] ${
           error
             ? "border-red-500"
-            : "border-[#D7DFEA] focus:border-[#2E7AF0] focus:ring-2 focus:ring-[#2E7AF0]/10"
+            : "border-[#D7DFEA] focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/10"
         } ${className}`}
       >
         <span className="flex min-w-0 flex-1 flex-wrap gap-1.5">
@@ -104,7 +104,7 @@ const MultiSelect = forwardRef(function MultiSelect({
             selectedOptions.map((option) => (
               <span
                 key={option.value}
-                className="inline-flex items-center gap-1 rounded-md bg-[#EAF1FF] px-2 py-1 text-xs font-semibold text-[#2E7AF0]"
+                className="inline-flex items-center gap-1 rounded-md bg-[#FFF7ED] px-2 py-1 text-xs font-semibold text-[#F97316]"
               >
                 {option.label}
                 <span
@@ -121,7 +121,7 @@ const MultiSelect = forwardRef(function MultiSelect({
                       removeOption(option.value);
                     }
                   }}
-                  className="rounded-full hover:bg-[#D7E5FF]"
+                  className="rounded-full hover:bg-[#FED7AA]"
                   aria-label={`Remove ${option.label}`}
                 >
                   <X size={12} />
@@ -151,7 +151,7 @@ const MultiSelect = forwardRef(function MultiSelect({
                 onClick={() => toggleOption(option.value)}
                 className={`flex w-full items-center justify-between px-3 py-2 text-left text-sm transition ${
                   isSelected
-                    ? "bg-[#EAF1FF] text-[#2E7AF0]"
+                    ? "bg-[#FFF7ED] text-[#F97316]"
                     : "text-[#03152B] hover:bg-[#F7F9FC]"
                 }`}
               >
@@ -159,7 +159,7 @@ const MultiSelect = forwardRef(function MultiSelect({
                 <span
                   className={`flex h-4 w-4 items-center justify-center rounded border ${
                     isSelected
-                      ? "border-[#2E7AF0] bg-[#2E7AF0] text-white"
+                      ? "border-[#F97316] bg-[#F97316] text-white"
                       : "border-[#CBD5E1]"
                   }`}
                 >

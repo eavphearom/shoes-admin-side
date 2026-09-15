@@ -82,7 +82,7 @@ export default function VariantList({
                
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#EAF1FF] text-[#2E7AF0]">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#FFF7ED] text-[#F97316]">
                       <Image size={18} />
                     </div>
                     <div>
@@ -165,7 +165,7 @@ function Actions({ item, onView, onEdit, onDelete }) {
       <button
         type="button"
         onClick={() => onView(item)}
-        className="cursor-pointer rounded-lg p-2 text-[#64748B] transition hover:bg-[#EAF1FF] hover:text-[#2E7AF0]"
+        className="cursor-pointer rounded-lg p-2 text-[#64748B] transition hover:bg-[#FFF7ED] hover:text-[#F97316]"
         aria-label={`View ${item.sku}`}
       >
         <Eye size={15} />
@@ -173,7 +173,7 @@ function Actions({ item, onView, onEdit, onDelete }) {
       <button
         type="button"
         onClick={() => onEdit(item)}
-        className="cursor-pointer rounded-lg p-2 text-[#64748B] transition hover:bg-[#EAF1FF] hover:text-[#2E7AF0]"
+        className="cursor-pointer rounded-lg p-2 text-[#64748B] transition hover:bg-[#FFF7ED] hover:text-[#F97316]"
         aria-label={`Edit ${item.sku}`}
       >
         <Edit2 size={15} />

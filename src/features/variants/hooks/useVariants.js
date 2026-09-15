@@ -24,7 +24,7 @@ export default function useVariants() {
       id: 2,
       product: "Air Max Pulse",
       color: "Royal Blue",
-      colorCode: "#2E7AF0",
+      colorCode: "#F97316",
       size: "US 9",
       sku: "AMP-BLU-09",
       price: 150,
@@ -51,7 +51,7 @@ export default function useVariants() {
   const addVariant = (data) => {
     const newVariant = {
       id: Date.now(),
-      colorCode: "#2E7AF0",
+      colorCode: "#F97316",
       createdAt: "Today",
       ...data,
     };

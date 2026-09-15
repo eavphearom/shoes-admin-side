@@ -73,8 +73,8 @@ export default function ImageUpload({
         {...getRootProps()}
         className={`group relative overflow-hidden rounded-lg border border-dashed p-4 transition ${
           isDragActive
-            ? "border-[#2E7AF0] bg-[#EAF1FF]"
-            : "border-[#CBD5E1] bg-[#F8FAFD] hover:border-[#2E7AF0] hover:bg-[#F4F8FF]"
+            ? "border-[#F97316] bg-[#FFF7ED]"
+            : "border-[#CBD5E1] bg-[#F8FAFD] hover:border-[#F97316] hover:bg-[#F4F8FF]"
         }`}
       >
         <input {...getInputProps()} />
@@ -112,7 +112,7 @@ export default function ImageUpload({
           </div>
         ) : (
           <div className="flex cursor-pointer flex-col items-center justify-center py-6 text-center">
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#2E7AF0] shadow-sm ring-1 ring-[#D7E5FF]">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#F97316] shadow-sm ring-1 ring-[#FED7AA]">
               {isDragActive ? (
                 <ImagePlus size={22} />
               ) : (

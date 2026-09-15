@@ -105,7 +105,7 @@ const activities = [
 function StatusBadge({ status }) {
   const colors = {
     Completed: "bg-emerald-50 text-emerald-700 ring-emerald-200",
-    Processing: "bg-blue-50 text-blue-700 ring-blue-200",
+    Processing: "bg-orange-50 text-orange-700 ring-orange-200",
     Pending: "bg-amber-50 text-amber-700 ring-amber-200",
   };
 
@@ -158,7 +158,7 @@ export default function DashboardPage() {
                     {stat.value}
                   </h2>
                 </div>
-                <div className="rounded-lg bg-blue-50 p-2 text-blue-700">
+                <div className="rounded-lg bg-orange-50 p-2 text-orange-700">
                   <Icon size={22} />
                 </div>
               </div>
@@ -207,7 +207,7 @@ export default function DashboardPage() {
               >
                 <div className="flex h-56 w-full items-end rounded-t-lg bg-slate-100">
                   <div
-                    className="w-full rounded-t-lg bg-blue-600 transition hover:bg-blue-700"
+                    className="w-full rounded-t-lg bg-[#F97316] transition hover:bg-[#EA580C]"
                     style={{ height: `${value}%` }}
                   />
                 </div>
@@ -260,13 +260,13 @@ export default function DashboardPage() {
                       {product.category}
                     </p>
                   </div>
-                  <span className="text-sm font-semibold text-blue-700">
+                  <span className="text-sm font-semibold text-orange-700">
                     {product.sales} sold
                   </span>
                 </div>
                 <div className="mt-3 h-2 rounded-full bg-slate-100">
                   <div
-                    className="h-2 rounded-full bg-blue-600"
+                    className="h-2 rounded-full bg-[#F97316]"
                     style={{ width: `${Math.min(product.sales / 4, 100)}%` }}
                   />
                 </div>
@@ -343,7 +343,7 @@ export default function DashboardPage() {
           <div className="mt-5 space-y-4">
             {activities.map((activity, index) => (
               <div key={activity} className="flex gap-3">
-                <div className="mt-1 h-2.5 w-2.5 rounded-full bg-blue-600" />
+                <div className="mt-1 h-2.5 w-2.5 rounded-full bg-[#F97316]" />
                 <div>
                   <p className="text-sm font-medium text-slate-800">
                     {activity}
@@ -360,3 +360,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+

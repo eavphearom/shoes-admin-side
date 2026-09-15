@@ -101,7 +101,7 @@ export default function OrderForm({ order = null, onSubmit }) {
         <textarea
           {...register("note")}
           placeholder="Enter order note"
-          className="w-full rounded-lg border border-[#D7DFEA] bg-white p-3 text-sm outline-none focus:border-[#2E7AF0] focus:ring-2 focus:ring-[#2E7AF0]/10"
+          className="w-full rounded-lg border border-[#D7DFEA] bg-white p-3 text-sm outline-none focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/10"
           rows={3}
         />
       </div>

@@ -70,7 +70,7 @@ export default function Navbar({
             <input
               type="search"
               placeholder="Search"
-              className="h-9 w-full rounded-lg border border-[#D7DFEA] bg-[#F7F9FC] pl-9 pr-3 text-sm text-[#03152B] outline-none transition placeholder:text-[#8A98AA] focus:border-[#2E7AF0] focus:bg-white focus:ring-2 focus:ring-[#2E7AF0]/10"
+              className="h-9 w-full rounded-lg border border-[#D7DFEA] bg-[#F7F9FC] pl-9 pr-3 text-sm text-[#03152B] outline-none transition placeholder:text-[#8A98AA] focus:border-[#F97316] focus:bg-white focus:ring-2 focus:ring-[#F97316]/10"
             />
           </label> */}
         </div>
@@ -93,7 +93,7 @@ export default function Navbar({
             to="/profile"
             className="flex items-center gap-3 rounded-lg p-1 transition hover:bg-[#F1F5F9]"
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#EAF1FF] text-xs font-bold text-[#2E7AF0] ring-1 ring-[#D7E5FF]">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FFF7ED] text-xs font-bold text-[#F97316] ring-1 ring-[#FED7AA]">
               {initials}
             </div>
             <div className="hidden sm:block">

@@ -245,7 +245,7 @@ export default function ProductForm({ product = null, onSubmit, onCancel }) {
                 {...register("description")}
                 placeholder="Enter product description (optional)"
                 rows={4}
-                className="w-full rounded-lg border border-[#D7DFEA] bg-white p-3 text-sm text-[#03152B] outline-none placeholder:text-[#8A98AA] focus:border-[#2E7AF0] focus:ring-2 focus:ring-[#2E7AF0]/10"
+                className="w-full rounded-lg border border-[#D7DFEA] bg-white p-3 text-sm text-[#03152B] outline-none placeholder:text-[#8A98AA] focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/10"
               />
               {errors.description && (
                 <p className="mt-1 text-sm text-red-500">
@@ -310,7 +310,7 @@ export default function ProductForm({ product = null, onSubmit, onCancel }) {
                   <div className="grid content-start gap-4 md:grid-cols-2">
                     <Input label="Variant SKU Prefix" placeholder="e.g. AF1" />
                     <Input
-                      label="Price (USD)"
+                      label="Cost"
                       type="number"
                       min="0"
                       step="0.01"
@@ -400,7 +400,7 @@ export default function ProductForm({ product = null, onSubmit, onCancel }) {
                                     event.target.value,
                                   )
                                 }
-                                className="w-full rounded-lg border border-[#D7DFEA] bg-white px-3 py-2 text-sm text-[#03152B] outline-none focus:border-[#2E7AF0] focus:ring-2 focus:ring-[#2E7AF0]/10"
+                                className="w-full rounded-lg border border-[#D7DFEA] bg-white px-3 py-2 text-sm text-[#03152B] outline-none focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/10"
                               />
                             </td>
                             <td className="px-3 py-2">
@@ -415,7 +415,7 @@ export default function ProductForm({ product = null, onSubmit, onCancel }) {
                                     event.target.value,
                                   )
                                 }
-                                className="w-full rounded-lg border border-[#D7DFEA] bg-white px-3 py-2 text-sm text-[#03152B] outline-none focus:border-[#2E7AF0] focus:ring-2 focus:ring-[#2E7AF0]/10"
+                                className="w-full rounded-lg border border-[#D7DFEA] bg-white px-3 py-2 text-sm text-[#03152B] outline-none focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/10"
                               />
                             </td>
                             <td className="px-3 py-2">
@@ -430,7 +430,7 @@ export default function ProductForm({ product = null, onSubmit, onCancel }) {
                                     event.target.value,
                                   )
                                 }
-                                className="w-full rounded-lg border border-[#D7DFEA] bg-white px-3 py-2 text-sm text-[#03152B] outline-none focus:border-[#2E7AF0] focus:ring-2 focus:ring-[#2E7AF0]/10"
+                                className="w-full rounded-lg border border-[#D7DFEA] bg-white px-3 py-2 text-sm text-[#03152B] outline-none focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/10"
                               />
                             </td>
                           </tr>
@@ -490,7 +490,7 @@ function CardTitle({ icon, title, description }) {
   return (
     <div>
       <div className="flex items-center gap-2">
-        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#EAF1FF] text-[#2E7AF0]">
+        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#FFF7ED] text-[#F97316]">
           {icon}
         </span>
         <h4 className="text-base font-bold text-[#03152B]">{title}</h4>

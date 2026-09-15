@@ -9,7 +9,7 @@ export default function Button({
   
 }) {
   const variants = {
-    primary: "bg-[#2E7AF0] text-white hover:bg-[#1F66D8]",
+    primary: "bg-[#F97316] text-white hover:bg-[#EA580C]",
     secondary:
       "border border-[#D7DFEA] bg-white text-[#03152B] hover:bg-[#F7F9FC]",
     warning: "bg-amber-50 text-amber-700 hover:bg-amber-100",

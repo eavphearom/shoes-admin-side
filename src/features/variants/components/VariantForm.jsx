@@ -23,7 +23,7 @@ const productOptions = [
 
 const colorOptions = [
   { value: "Midnight Navy", label: "Midnight Navy", colorCode: "#1E2B3F" },
-  { value: "Royal Blue", label: "Royal Blue", colorCode: "#2E7AF0" },
+  { value: "Royal Blue", label: "Royal Blue", colorCode: "#F97316" },
   { value: "Cool Gray", label: "Cool Gray", colorCode: "#64748B" },
 ];
 
@@ -216,7 +216,7 @@ export default function VariantForm({ variant = null, onSubmit, onCancel }) {
               <textarea
                 {...register("description")}
                 placeholder="Enter description"
-                className="min-h-24 w-full rounded-lg border border-[#D7DFEA] bg-white p-3 text-sm text-[#03152B] outline-none placeholder:text-[#8A98AA] focus:border-[#2E7AF0] focus:ring-2 focus:ring-[#2E7AF0]/10"
+                className="min-h-24 w-full rounded-lg border border-[#D7DFEA] bg-white p-3 text-sm text-[#03152B] outline-none placeholder:text-[#8A98AA] focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/10"
               />
               {errors.description && (
                 <p className="mt-1 text-sm text-red-500">
@@ -233,7 +233,7 @@ export default function VariantForm({ variant = null, onSubmit, onCancel }) {
                 title="Variant Images"
                 compact
               />
-              <span className="rounded-full bg-[#EAF1FF] px-3 py-1 text-xs font-semibold text-[#2E7AF0]">
+              <span className="rounded-full bg-[#FFF7ED] px-3 py-1 text-xs font-semibold text-[#F97316]">
                 Max 5 images
               </span>
             </div>
@@ -385,7 +385,7 @@ function CardTitle({ icon, title, description, compact = false }) {
   return (
     <div>
       <div className="flex items-center gap-2">
-        <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[#EAF1FF] text-[#2E7AF0]">
+        <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[#FFF7ED] text-[#F97316]">
           {icon}
         </span>
         <h4 className="text-base font-bold text-[#03152B]">{title}</h4>

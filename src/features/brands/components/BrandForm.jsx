@@ -60,7 +60,7 @@ export default function BrandForm({ brand = null, onSubmit }) {
         <textarea
           {...register("description")}
           placeholder="Enter description"
-          className="w-full rounded-lg border border-[#D7DFEA] bg-white p-3 text-sm outline-none focus:border-[#2E7AF0] focus:ring-2 focus:ring-[#2E7AF0]/10"
+          className="w-full rounded-lg border border-[#D7DFEA] bg-white p-3 text-sm outline-none focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/10"
           rows={4}
         />
         {errors.description && (

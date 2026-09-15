@@ -69,7 +69,7 @@ export default function UserRoleList({
               >
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#EAF1FF] text-xs font-bold text-[#2E7AF0]">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FFF7ED] text-xs font-bold text-[#F97316]">
                       {user.name
                         .split(" ")
                         .map((name) => name[0])
@@ -85,7 +85,7 @@ export default function UserRoleList({
                   </div>
                 </td>
                 <td className="px-4 py-3">
-                  <span className="rounded-md bg-[#EAF1FF] px-2 py-1 text-xs font-semibold text-[#2E7AF0]">
+                  <span className="rounded-md bg-[#FFF7ED] px-2 py-1 text-xs font-semibold text-[#F97316]">
                     {user.role}
                   </span>
                 </td>
@@ -140,7 +140,7 @@ function Actions({ item, onEdit, onDelete }) {
       <button
         type="button"
         onClick={() => onEdit(item)}
-        className="cursor-pointer rounded-lg p-2 text-[#64748B] hover:bg-[#EAF1FF] hover:text-[#2E7AF0]"
+        className="cursor-pointer rounded-lg p-2 text-[#64748B] hover:bg-[#FFF7ED] hover:text-[#F97316]"
         aria-label={`Edit ${item.name}`}
       >
         <Edit2 size={15} />

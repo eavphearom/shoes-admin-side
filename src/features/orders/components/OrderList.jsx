@@ -87,7 +87,7 @@ export default function OrderList({
 function OrderBadge({ status }) {
   const styles = {
     Pending: "bg-amber-100 text-amber-700",
-    Processing: "bg-[#EAF1FF] text-[#2E7AF0]",
+    Processing: "bg-[#FFF7ED] text-[#F97316]",
     Shipped: "bg-indigo-50 text-indigo-700",
     Delivered: "bg-[#DCFCE7] text-[#15803D]",
     Cancelled: "bg-red-50 text-red-600",
@@ -116,9 +116,9 @@ function Actions({ item, label, onView, onUpdateStatus, onCancel }) {
 
   return (
     <div className="flex justify-end gap-1">
-      <button type="button" onClick={() => onView(item)} className="cursor-pointer rounded-lg p-2 text-[#64748B] transition hover:bg-[#EAF1FF] hover:text-[#2E7AF0]" aria-label={`View details for ${label}`}><Eye size={15} /></button>
+      <button type="button" onClick={() => onView(item)} className="cursor-pointer rounded-lg p-2 text-[#64748B] transition hover:bg-[#FFF7ED] hover:text-[#F97316]" aria-label={`View details for ${label}`}><Eye size={15} /></button>
       {canUpdateStatus && (
-        <button type="button" onClick={() => onUpdateStatus(item)} className="cursor-pointer rounded-lg p-2 text-[#64748B] transition hover:bg-[#EAF1FF] hover:text-[#2E7AF0]" aria-label={`Update status for ${label}`}><RefreshCw size={15} /></button>
+        <button type="button" onClick={() => onUpdateStatus(item)} className="cursor-pointer rounded-lg p-2 text-[#64748B] transition hover:bg-[#FFF7ED] hover:text-[#F97316]" aria-label={`Update status for ${label}`}><RefreshCw size={15} /></button>
       )}
       {canCancel && (
         <button type="button" onClick={() => onCancel(item)} className="cursor-pointer rounded-lg p-2 text-[#64748B] transition hover:bg-red-50 hover:text-red-600" aria-label={`Cancel ${label}`}><XCircle size={15} /></button>

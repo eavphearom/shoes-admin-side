@@ -55,7 +55,7 @@ export default function ProductDetail({ variant, onClose }) {
                   behavior: "smooth",
                 })
               }
-              className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[#D7DFEA] bg-white text-[#64748B] transition hover:bg-[#F7F9FC] hover:text-[#2E7AF0]"
+              className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[#D7DFEA] bg-white text-[#64748B] transition hover:bg-[#F7F9FC] hover:text-[#F97316]"
               aria-label="Scroll thumbnails left"
             >
               <ChevronLeft size={18} />
@@ -72,8 +72,8 @@ export default function ProductDetail({ variant, onClose }) {
                   onClick={() => setSelectedImage(image)}
                   className={`flex aspect-square cursor-pointer items-center justify-center overflow-hidden rounded-lg border bg-[#F8FAFD] transition ${
                     selectedImage.id === image.id
-                      ? "border-[#2E7AF0] ring-1 ring-[#2E7AF0]"
-                      : "border-[#D7DFEA] hover:border-[#2E7AF0]"
+                      ? "border-[#F97316] ring-1 ring-[#F97316]"
+                      : "border-[#D7DFEA] hover:border-[#F97316]"
                   }`}
                 >
                   <img
@@ -99,7 +99,7 @@ export default function ProductDetail({ variant, onClose }) {
                   behavior: "smooth",
                 })
               }
-              className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[#D7DFEA] bg-white text-[#64748B] transition hover:bg-[#F7F9FC] hover:text-[#2E7AF0]"
+              className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[#D7DFEA] bg-white text-[#64748B] transition hover:bg-[#F7F9FC] hover:text-[#F97316]"
               aria-label="Scroll thumbnails right"
             >
               <ChevronRight size={18} />
@@ -135,7 +135,7 @@ export default function ProductDetail({ variant, onClose }) {
       <section className="mx-4 mt-2 overflow-hidden rounded-lg border border-[#D7DFEA] bg-white shadow-sm">
         <div className="flex flex-col justify-between gap-3 border-b border-[#E5EAF1] p-4 sm:flex-row sm:items-center">
           <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[#EAF1FF] text-[#2E7AF0]">
+            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[#FFF7ED] text-[#F97316]">
               <Boxes size={16} />
             </span>
             <h4 className="font-bold text-[#03152B]">Real Stock</h4>
@@ -206,7 +206,7 @@ function DetailRow({ label, value, link = false }) {
       <dt className="font-semibold text-[#64748B]">{label}</dt>
       <dd
         className={`font-semibold ${
-          link ? "text-[#2E7AF0]" : "text-[#03152B]"
+          link ? "text-[#F97316]" : "text-[#03152B]"
         }`}
       >
         {value}
@@ -234,7 +234,7 @@ function StockBadge({ stock, lowStock }) {
 function getBrandName(productName) {
   if (typeof productName !== "string") return "Nike";
 
-  if (productName.includes("Ultraboost")) return "Adidas";
+  if (productName.includes("s")) return "Adidas";
   if (productName.includes("RS-X")) return "Puma";
 
   return "Nike";

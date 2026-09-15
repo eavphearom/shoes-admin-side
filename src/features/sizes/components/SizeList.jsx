@@ -123,7 +123,7 @@ function Actions({ item, onEdit, onDelete }) {
       <button
         type="button"
         onClick={() => onEdit(item)}
-        className="cursor-pointer rounded-lg p-2 text-[#64748B] transition hover:bg-[#EAF1FF] hover:text-[#2E7AF0]"
+        className="cursor-pointer rounded-lg p-2 text-[#64748B] transition hover:bg-[#FFF7ED] hover:text-[#F97316]"
         aria-label={`Edit ${item.name}`}
       >
         <Edit2 size={15} />

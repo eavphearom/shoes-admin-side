@@ -17,7 +17,7 @@ export default function useColors() {
     {
       id: 2,
       name: "Royal Blue",
-      colorCode: "#2E7AF0",
+      colorCode: "#F97316",
       description: "Primary blue accent color",
       status: "Active",
       createdAt: "Oct 18, 2023",

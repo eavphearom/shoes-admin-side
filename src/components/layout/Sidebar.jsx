@@ -1,10 +1,7 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   BarChart3,
   Badge,
-  Box,
-  Boxes,
-  Layers,
   LayoutDashboard,
   LogOut,
   Package,
@@ -17,17 +14,16 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../features/auth/hooks/useAuth";
+import BrandLogo from "../ui/BrandLogo";
 
 const menuItems = [
   { label: "Dashboard", to: "/", icon: LayoutDashboard },
+  { label: "Banner", to: "/banner", icon: Tags },
   { label: "Category", to: "/category", icon: Tags },
   { label: "Brand", to: "/brand", icon: Badge },
   { label: "Color", to: "/color", icon: Palette },
   { label: "Size", to: "/size", icon: Ruler },
   { label: "Products", to: "/products", icon: Package },
-  // { label: "Variant", to: "/variants", icon: Layers },
   { label: "Orders", to: "/orders", icon: ShoppingBag },
   { label: "Customers", to: "/customers", icon: Users },
   { label: "User & Role", to: "/user-role", icon: ShieldCheck },
@@ -39,11 +35,9 @@ export default function Sidebar({
   isCollapsed = false,
   onClose,
 }) {
-  const { logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    // await logout();
     navigate("/login");
     onClose?.();
   };
@@ -62,21 +56,13 @@ export default function Sidebar({
           isOpen ? "translate-x-0" : "-translate-x-full"
         } ${isCollapsed ? "lg:-translate-x-full" : "lg:translate-x-0"}`}
       >
-        <div className="flex h-[76px] items-center justify-between px-5">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2E7AF0]">
-              <Box size={19} />
-            </div>
-            <div>
-              <h1 className="text-lg font-bold text-white uppercase">GPT-Store</h1>
-              {/* <p className="text-xs text-[#8FA2BD]">Admin Panel</p> */}
-            </div>
-          </div>
+        <div className="relative flex h-[76px] items-center justify-center px-5">
+          <BrandLogo size="md" shoesClassName="text-white" />
 
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-2 text-[#8FA2BD] hover:bg-white/10 lg:hidden"
+            className="absolute right-3 rounded-lg p-2 text-[#8FA2BD] hover:bg-white/10 lg:hidden"
             aria-label="Close sidebar"
           >
             <X size={18} />
@@ -93,9 +79,9 @@ export default function Sidebar({
                 to={item.to}
                 onClick={onClose}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 rounded-lg px-3 py-2.5 text-xs font-medium transition ${
+                  `flex items-center gap-3 rounded-lg px-3 py-2.5 text-md font-medium transition ${
                     isActive
-                      ? "bg-[#2E7AF0] text-white shadow-sm"
+                      ? "bg-[#F97316] text-white shadow-sm"
                       : "text-[#8FA2BD] hover:bg-white/10 hover:text-white"
                   }`
                 }
@@ -114,7 +100,7 @@ export default function Sidebar({
             className={({ isActive }) =>
               `flex items-center gap-3 rounded-lg px-3 py-2.5 text-xs font-medium transition ${
                 isActive
-                  ? "bg-[#2E7AF0] text-white"
+                  ? "bg-[#F97316] text-white"
                   : "text-[#8FA2BD] hover:bg-white/10 hover:text-white"
               }`
             }
@@ -124,7 +110,6 @@ export default function Sidebar({
           </NavLink>
           <button
             type="button"
-            
             onClick={handleLogout}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-xs font-medium text-[#8FA2BD] transition hover:bg-white/10 hover:text-white"
           >
@@ -136,3 +121,5 @@ export default function Sidebar({
     </>
   );
 }
+
+

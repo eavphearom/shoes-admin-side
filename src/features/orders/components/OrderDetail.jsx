@@ -242,7 +242,7 @@ export default function OrderDetail({ order, onClose, onUpdateStatus }) {
             <SummaryRow label="Discount" value={`-$${discount.toFixed(2)}`} danger />
             <div className="mt-4 flex items-center justify-between border-t border-[#E5EAF1] pt-4">
               <span className="font-bold text-[#03152B]">Grand Total</span>
-              <span className="text-xl font-black text-[#3B32F6] sm:text-2xl">
+              <span className="text-xl font-black text-[#F97316] sm:text-2xl">
                 ${grandTotal.toFixed(2)}
               </span>
             </div>
@@ -260,10 +260,10 @@ export default function OrderDetail({ order, onClose, onUpdateStatus }) {
           </InfoCard>
         </div>
 
-        <section className="rounded-lg border border-[#D7DFFF] bg-[#F4F3FF] p-4">
+        <section className="rounded-lg border border-[#FED7AA] bg-[#FFF7ED] p-4">
           <div className="grid gap-3 lg:grid-cols-[1fr_220px_160px] lg:items-center">
             <div>
-              <h4 className="font-bold text-[#3B32F6]">Update Order Status</h4>
+              <h4 className="font-bold text-[#F97316]">Update Order Status</h4>
               <p className="mt-1 text-sm text-[#64748B]">
                 Update the current order status
               </p>
@@ -286,7 +286,7 @@ export default function OrderDetail({ order, onClose, onUpdateStatus }) {
 function CardHeader({ icon, title }) {
   return (
     <div className="flex items-center gap-2 border-b border-[#E5EAF1] p-4">
-      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#EEF2FF] text-[#3B32F6]">
+      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#FFF7ED] text-[#F97316]">
         {icon}
       </span>
       <h4 className="text-sm font-bold text-[#03152B] sm:text-base">{title}</h4>
@@ -300,7 +300,7 @@ function InfoCard({ icon, title, children }) {
       {title && (
         <div className="mb-4 flex items-center gap-2">
           {icon && (
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#EEF2FF] text-[#3B32F6]">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#FFF7ED] text-[#F97316]">
               {icon}
             </span>
           )}
@@ -355,7 +355,7 @@ function Timeline({ steps, activeKey, type }) {
           <div
             key={step.key}
             className={`grid grid-cols-[26px_minmax(0,1fr)_72px] gap-2 rounded-lg p-2 text-xs sm:grid-cols-[32px_minmax(0,1fr)_110px] sm:gap-3 sm:text-sm ${
-              isActive ? "bg-[#F4F3FF]" : ""
+              isActive ? "bg-[#FFF7ED]" : ""
             }`}
           >
             <div className="relative flex justify-center">
@@ -372,7 +372,7 @@ function Timeline({ steps, activeKey, type }) {
             <div>
               <p
                 className={`font-bold ${
-                  isActive ? "text-[#3B32F6]" : "text-[#03152B]"
+                  isActive ? "text-[#F97316]" : "text-[#03152B]"
                 }`}
               >
                 {step.title}
@@ -381,7 +381,7 @@ function Timeline({ steps, activeKey, type }) {
             </div>
             <p
               className={`text-right text-[11px] sm:text-sm ${
-                isActive ? "text-[#3B32F6]" : "text-[#64748B]"
+                isActive ? "text-[#F97316]" : "text-[#64748B]"
               }`}
             >
               {step.time}
@@ -412,7 +412,7 @@ function TimelineIcon({ complete, active, cancelled, type }) {
 
   if (active) {
     return (
-      <span className="relative z-10 flex h-5 w-5 items-center justify-center rounded-full bg-white text-[#3B32F6] ring-2 ring-[#3B32F6]">
+      <span className="relative z-10 flex h-5 w-5 items-center justify-center rounded-full bg-white text-[#F97316] ring-2 ring-[#F97316]">
         {type === "order" ? <Truck size={12} /> : <CheckCircle2 size={12} />}
       </span>
     );
@@ -428,7 +428,7 @@ function TimelineIcon({ complete, active, cancelled, type }) {
 function OrderBadge({ status }) {
   const styles = {
     Pending: "bg-amber-100 text-amber-700",
-    Processing: "bg-[#EAF1FF] text-[#2E7AF0]",
+    Processing: "bg-[#FFF7ED] text-[#F97316]",
     Shipped: "bg-indigo-100 text-indigo-700",
     Delivered: "bg-[#DCFCE7] text-[#15803D]",
     Cancelled: "bg-red-50 text-red-600",
