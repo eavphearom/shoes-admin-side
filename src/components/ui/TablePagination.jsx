@@ -62,7 +62,7 @@ export default function TablePagination({
               onClick={() => onPageChange(pageNumber)}
               className={`h-8 w-8 cursor-pointer rounded-lg text-sm font-semibold transition ${
                 page === pageNumber
-                  ? "bg-[#03152B] text-white"
+                  ? "bg-[#ef6a2c] text-white"
                   : "hover:bg-[#F1F5F9]"
               }`}
             >

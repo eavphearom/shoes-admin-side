@@ -127,7 +127,7 @@ export default function ProductPage() {
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
         title="Create Product"
-        size="xl"
+        size="full"
       >
         <ProductForm
           onSubmit={handleCreate}
