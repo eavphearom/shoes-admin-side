@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import Button from "../../../components/ui/Button";
 import ImageUpload from "../../../components/ui/ImageUpload";
 import Input from "../../../components/ui/Input";
-import { brandSchema } from "../schemas/brandSchema";
+import { brandSchema } from "../schemas/BrandSchema";
 
 export default function BrandForm({ brand = null, onSubmit }) {
   const {
