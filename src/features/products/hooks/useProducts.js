@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import productService from "../services/productService";
+import { listProduct } from "../productFormModel";
 
 export default function useProducts() {
   const [search, setSearch] = useState("");
@@ -6,156 +8,36 @@ export default function useProducts() {
   const [brandFilter, setBrandFilter] = useState("All Brands");
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
-
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "Air Max Pulse",
-      category: "Shoes",
-      brand: "Nike",
-      variants: 8,
-      priceRange: "$120 - $180",
-      stock: 145,
-      status: "Active",
-      description: "Responsive daily running sneaker",
-      images: [],
-      createdAt: "Oct 24, 2023",
-    },
-    {
-      id: 2,
-      name: "Ultraboost Light",
-      category: "Shoes",
-      brand: "Adidas",
-      variants: 12,
-      priceRange: "$150 - $190",
-      stock: 42,
-      status: "Active",
-      description: "Lightweight cushioned performance shoe",
-      images: [],
-      createdAt: "Oct 20, 2023",
-    },
-    {
-      id: 3,
-      name: "RS-X Toys",
-      category: "Shoes",
-      brand: "Puma",
-      variants: 3,
-      priceRange: "$110 - $110",
-      stock: 0,
-      status: "Draft",
-      description: "Bold lifestyle sneaker",
-      images: [],
-      createdAt: "Oct 14, 2023",
-    },
-  ]);
-
-  const addProduct = (data) => {
-    const newProduct = {
-      id: Date.now(),
-      variants: 0,
-      priceRange: "$0 - $0",
-      stock: 0,
-      createdAt: "Today",
-      ...data,
-    };
-
-    setProducts((prevProducts) => [newProduct, ...prevProducts]);
-  };
-
-  const updateProduct = (id, data) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === id ? { ...product, ...data } : product,
-      ),
-    );
-  };
-
-  const deleteProduct = (id) => {
-    setProducts((prevProducts) =>
-      prevProducts.filter((product) => product.id !== id),
-    );
-  };
-
-  const categoryOptions = [
-    {
-      value: "All Categories",
-      label: "All Categories",
-    },
-    ...Array.from(new Set(products.map((product) => product.category))).map(
-      (category) => ({
-        value: category,
-        label: category,
-      }),
-    ),
-  ];
-
-  const brandOptions = [
-    {
-      value: "All Brands",
-      label: "All Brands",
-    },
-    ...Array.from(new Set(products.map((product) => product.brand))).map(
-      (brand) => ({
-        value: brand,
-        label: brand,
-      }),
-    ),
-  ];
-
-  const filteredProducts = products.filter(
-    (product) =>
-      (categoryFilter === "All Categories" ||
-        product.category === categoryFilter) &&
-      (brandFilter === "All Brands" || product.brand === brandFilter) &&
-      product.name.toLowerCase().includes(search.toLowerCase()),
-  );
-
-  const totalPages = Math.ceil(filteredProducts.length / perPage);
-  const startIndex = (page - 1) * perPage;
-  const paginatedProducts = filteredProducts.slice(
-    startIndex,
-    startIndex + perPage,
-  );
-
-  const handleSearch = (value) => {
-    setSearch(value);
-    setPage(1);
-  };
-
-  const handleCategoryFilter = (value) => {
-    setCategoryFilter(value);
-    setPage(1);
-  };
-
-  const handleBrandFilter = (value) => {
-    setBrandFilter(value);
-    setPage(1);
-  };
-
-  const handlePerPageChange = (value) => {
-    setPerPage(Number(value));
-    setPage(1);
-  };
-
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    let cancelled = false;
+    productService.list().then(data => { if (!cancelled) setProducts(data); })
+      .catch(error => { if (!cancelled) setError(error.message); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
+  async function deleteProduct(id) {
+    await productService.remove(id);
+    setProducts(current => current.filter(product => product.id !== id));
+  }
+  const categoryOptions = ["All Categories", ...new Set(products.map(p => p.category))].map(value => ({ value, label: value }));
+  const brandOptions = ["All Brands", ...new Set(products.map(p => p.brand))].map(value => ({ value, label: value }));
+  const filtered = products.filter(product =>
+    (categoryFilter === "All Categories" || product.category === categoryFilter) &&
+    (brandFilter === "All Brands" || product.brand === brandFilter) &&
+    product.name.toLowerCase().includes(search.toLowerCase()));
+  const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+  const currentPage = Math.min(page, totalPages);
+  const startIndex = (currentPage - 1) * perPage;
   return {
-    products: paginatedProducts,
-    search,
-    handleSearch,
-    categoryFilter,
-    handleCategoryFilter,
-    categoryOptions,
-    brandFilter,
-    handleBrandFilter,
-    brandOptions,
-    page,
-    setPage,
-    totalPages,
-    totalItems: filteredProducts.length,
-    startIndex,
-    perPage,
-    handlePerPageChange,
-    addProduct,
-    updateProduct,
-    deleteProduct,
+    products: filtered.slice(startIndex, startIndex + perPage).map(listProduct),
+    search, handleSearch: value => { setSearch(value); setPage(1); },
+    categoryFilter, handleCategoryFilter: value => { setCategoryFilter(value); setPage(1); }, categoryOptions,
+    brandFilter, handleBrandFilter: value => { setBrandFilter(value); setPage(1); }, brandOptions,
+    page: currentPage, setPage, totalPages, totalItems: filtered.length, startIndex, perPage,
+    handlePerPageChange: value => { setPerPage(Number(value)); setPage(1); },
+    deleteProduct, loading, error,
   };
 }

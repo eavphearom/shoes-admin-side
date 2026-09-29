@@ -1,3 +1,5 @@
+import { RefreshCw } from "lucide-react";
+
 export default function Button({
   children,
   type = "button",
@@ -6,7 +8,6 @@ export default function Button({
   disabled = false,
   onClick,
   className = "",
-  
 }) {
   const variants = {
     primary: "bg-[#F97316] text-white hover:bg-[#EA580C]",
@@ -21,15 +22,23 @@ export default function Button({
       type={type}
       onClick={onClick}
       disabled={disabled || loading}
+      aria-busy={loading}
       className={`
-        inline-flex items-center cursor-pointer justify-center rounded-lg px-4 py-2 text-sm font-semibold
-        transition
-        disabled:cursor-not-allowed disabled:opacity-50
-        ${variants[variant]}
-        ${className}
-      `}
+    inline-flex items-center justify-center gap-2
+    rounded-lg px-4 py-2 text-sm font-semibold
+    transition-all duration-200
+    disabled:cursor-not-allowed,
+    cursor-pointer
+    ${variants[variant]}
+    ${loading ? "!bg-[#FB923C] !shadow-none" : ""}
+    ${className}
+  `}
     >
-      {loading ? "Loading..." : children}
+      {children}
+
+      {loading && (
+        <RefreshCw size={18} className="animate-spin" aria-hidden="true" />
+      )}
     </button>
   );
 }

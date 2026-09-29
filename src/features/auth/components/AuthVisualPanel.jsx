@@ -1,5 +1,4 @@
-
-import authShoe from "../../../assets/auth-shoe.png";
+import authShoe from "../../../assets/welcome.png";
 import BrandLogo from "../../../components/ui/BrandLogo";
 
 export default function AuthVisualPanel({
@@ -13,9 +12,8 @@ export default function AuthVisualPanel({
       <aside className="relative hidden min-h-[680px] overflow-hidden bg-[#FF9B65] p-8 lg:block">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_24%_18%,rgba(255,255,255,0.34),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.12),rgba(249,115,22,0.22))]" />
 
-        <div className="relative z-10 flex h-full min-h-[680px] flex-col justify-between">
+        <div className="relative z-10 flex h-full min-h-[550px] flex-col justify-between">
           <div>
-           
             <BrandLogo
               size="md"
               className="drop-shadow-sm"
@@ -82,4 +80,3 @@ export default function AuthVisualPanel({
     </aside>
   );
 }
-

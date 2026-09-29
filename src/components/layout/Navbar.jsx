@@ -1,4 +1,10 @@
-import { Bell, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import {
+  Bell,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Expand,
+  Shrink,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../features/auth/hooks/useAuth";
@@ -8,8 +14,38 @@ export default function Navbar({
   onMenuClick,
   onSidebarToggle,
 }) {
+  // full screen functionality
+  const [isFullscreen, setIsFullscreen] = useState(() =>
+    Boolean(document.fullscreenElement),
+  );
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(Boolean(document.fullscreenElement));
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
+
+  const toggleFullscreen = async () => {
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+      } else {
+        await document.documentElement.requestFullscreen();
+      }
+    } catch (error) {
+      console.error("Unable to change fullscreen mode:", error);
+    }
+  };
+
   const { user } = useAuth();
-  const displayName = user?.name || "Admin User";
+  const displayName = user?.username || "Admin ";
+  const displayRole = user?.role || "ADMIN";
   const [currentTime, setCurrentTime] = useState(new Date());
 
   const initials = useMemo(() => {
@@ -42,7 +78,7 @@ export default function Navbar({
           <button
             type="button"
             onClick={onMenuClick}
-            className="rounded-lg border border-[#D7DFEA] p-2 text-[#64748B] lg:hidden"
+            className="rounded-lg border cursor-pointer border-[#D7DFEA] p-2 text-[#64748B] lg:hidden"
             aria-label="Open sidebar"
           >
             <PanelLeftOpen size={20} />
@@ -51,7 +87,7 @@ export default function Navbar({
           <button
             type="button"
             onClick={onSidebarToggle}
-            className="hidden rounded-lg border border-[#D7DFEA] p-2 text-[#64748B] transition hover:bg-[#F1F5F9] hover:text-[#03152B] lg:inline-flex"
+            className="hidden rounded-lg cursor-pointer border border-[#D7DFEA] p-2 text-[#64748B] transition hover:bg-[#F1F5F9] hover:text-[#03152B] lg:inline-flex"
             aria-label={isSidebarCollapsed ? "Show sidebar" : "Hide sidebar"}
             title={isSidebarCollapsed ? "Show sidebar" : "Hide sidebar"}
           >
@@ -76,6 +112,15 @@ export default function Navbar({
         </div>
 
         <div className="flex items-center cursor-pointer gap-4">
+          <button
+            type="button"
+            onClick={toggleFullscreen}
+            title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+            aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+            className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-[#475569] transition hover:bg-[#F1F5F9]"
+          >
+            {isFullscreen ? <Shrink size={19} /> : <Expand size={19} />}
+          </button>
           <div className="hidden rounded-lg px-3 py-2 text-sm font-semibold text-[#03152B] sm:block">
             {formattedTime}
           </div>
@@ -93,14 +138,22 @@ export default function Navbar({
             to="/profile"
             className="flex items-center gap-3 rounded-lg p-1 transition hover:bg-[#F1F5F9]"
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FFF7ED] text-xs font-bold text-[#F97316] ring-1 ring-[#FED7AA]">
-              {initials}
-            </div>
+            {user?.profile ? (
+              <img
+                src={user.profile}
+                alt={displayName}
+                className="h-8 w-8 rounded-full object-cover"
+              />
+            ) : (
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FFF7ED] text-xs font-bold text-[#F97316] ring-1 ring-[#FED7AA]">
+                {initials}
+              </div>
+            )}
             <div className="hidden sm:block">
               <p className="text-xs font-semibold text-[#03152B]">
                 {displayName}
               </p>
-              <p className="text-[11px] text-[#64748B]">Superadmin</p>
+              <p className="text-[11px] text-[#64748B]">{displayRole}</p>
             </div>
           </Link>
         </div>

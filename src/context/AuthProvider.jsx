@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import AuthContext from "./AuthContext";
 import authService from "../features/auth/services/authService";
+import Loading from "../components/ui/Loading";
 
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -29,13 +30,28 @@ export default function AuthProvider({ children }) {
     checkAuth();
   }, []);
 
+  // const login = async (credentials) => {
+  //   const response = await authService.login(credentials);
+  //   const { user, token } = response.data;
+  //   localStorage.setItem("token", token);
+  //   setUser(user);
+
+  //   return response;
+  // };
   const login = async (credentials) => {
     const response = await authService.login(credentials);
-    const { user, token } = response.data;
-    localStorage.setItem("token", token);
-    setUser(user);
+    const userData = response.data;
 
-    return response;
+    localStorage.setItem("token", userData.token);
+
+    setUser({
+      id: userData.id,
+      name: userData.name,
+      email: userData.email,
+      role: userData.role,
+    });
+
+    return userData;
   };
 
   // Logout user
@@ -57,7 +73,7 @@ export default function AuthProvider({ children }) {
         logout,
       }}
     >
-      {children}
+      {loading ? <Loading /> : children}
     </AuthContext.Provider>
   );
 }

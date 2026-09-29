@@ -1,241 +1,156 @@
-import { Boxes, ChevronLeft, ChevronRight, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { Ban, Box, Boxes, ChevronRight, Database, Palette, TriangleAlert, X } from "lucide-react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import authShoe from "../../../assets/auth-shoe.png";
 import Button from "../../../components/ui/Button";
+import { stockPreview, summarizeStock } from "../data/stockPreview";
+import { StockImage, StockStat, StockTable, StatusBadge } from "./StockDetails";
+import "./ProductDetail.css";
 
-const galleryImages = [
-  { id: 1, src: authShoe, alt: "White sneaker side view" },
-  { id: 2, src: authShoe, alt: "Black sneaker side view", tone: "dark" },
-  { id: 3, src: authShoe, alt: "White sneaker sole view", tone: "muted" },
-  { id: 4, src: authShoe, alt: "White sneaker angle view" },
-  { id: 5, src: authShoe, alt: "White sneaker top view", tone: "muted" },
-  { id: 6, src: authShoe, alt: "Black sneaker angle view", tone: "dark" },
-];
+const emptyVariants = [];
 
-const stockRows = [
-  { id: 1, color: "White", size: "US 6", price: "$120.00", stock: 12, lowStock: 3 },
-  { id: 2, color: "White", size: "US 7", price: "$120.00", stock: 18, lowStock: 3 },
-  { id: 3, color: "White", size: "US 8", price: "$120.00", stock: 15, lowStock: 3 },
-  { id: 4, color: "White", size: "US 9", price: "$120.00", stock: 14, lowStock: 3 },
-  { id: 5, color: "White", size: "US 10", price: "$120.00", stock: 11, lowStock: 2 },
-  { id: 6, color: "White", size: "US 11", price: "$120.00", stock: 8, lowStock: 2 },
-];
+export default function ProductDetail({ product, onClose }) {
+  const dialogRef = useRef(null);
+  const closeRef = useRef(null);
+  const timerRef = useRef(null);
+  const titleId = useId();
+  const descriptionId = useId();
+  const [closing, setClosing] = useState(false);
+  // Preview fixtures stay separate from the product list until API integration.
+  const variants = product?.variants === 0 ? emptyVariants : stockPreview;
+  const [selectedId, setSelectedId] = useState(() => (variants.find((item) => item.is_default) || variants[0])?.id);
+  const selected = variants.find((item) => item.id === selectedId) || variants[0];
+  const totals = useMemo(() => summarizeStock(variants.flatMap((item) => item.stocks)), [variants]);
+  const current = useMemo(() => summarizeStock(selected?.stocks || []), [selected]);
 
-export default function ProductDetail({ variant, onClose }) {
-  const [selectedImage, setSelectedImage] = useState(galleryImages[0]);
-  const thumbnailRef = useRef(null);
-  const totalStock = stockRows.reduce((total, row) => total + row.stock, 0);
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    const trigger = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    dialog.showModal();
+    closeRef.current?.focus({ preventScroll: true });
+    return () => {
+      clearTimeout(timerRef.current);
+      dialog.close();
+      document.body.style.overflow = previousOverflow;
+      if (trigger instanceof HTMLElement && trigger.isConnected) trigger.focus({ preventScroll: true });
+    };
+  }, []);
 
-  if (!variant) return null;
+  function requestClose() {
+    if (closing) return;
+    setClosing(true);
+    const duration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 300;
+    timerRef.current = window.setTimeout(onClose, duration);
+  }
 
-  return (
-    <div className="-m-4 bg-white">
-      <div className="grid gap-6 p-4 lg:grid-cols-[420px_minmax(0,1fr)]">
-        <div>
-          <div className="flex aspect-square items-center justify-center overflow-hidden rounded-lg bg-[#F7F9FC]">
-            <img
-              src={selectedImage.src}
-              alt={selectedImage.alt}
-              className={`h-full w-full object-contain p-8 ${
-                selectedImage.tone === "dark"
-                  ? "grayscale brightness-50"
-                  : selectedImage.tone === "muted"
-                    ? "grayscale opacity-70"
-                    : ""
-              }`}
-            />
-          </div>
+  function handleKeyDown(event) {
+    if (event.key !== "Tab") return;
+    const controls = Array.from(dialogRef.current.querySelectorAll('button, [tabindex="0"]'));
+    const first = controls[0];
+    const last = controls[controls.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last?.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first?.focus();
+    }
+  }
 
-          <div className="mt-4 flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() =>
-                thumbnailRef.current?.scrollBy({
-                  left: -96,
-                  behavior: "smooth",
-                })
-              }
-              className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[#D7DFEA] bg-white text-[#64748B] transition hover:bg-[#F7F9FC] hover:text-[#F97316]"
-              aria-label="Scroll thumbnails left"
-            >
-              <ChevronLeft size={18} />
-            </button>
+  const image = product?.images?.[0]?.url || (typeof product?.images?.[0] === "string" ? product.images[0] : authShoe);
 
-            <div
-              ref={thumbnailRef}
-              className="grid flex-1 auto-cols-[calc((100%-36px)/4)] grid-flow-col gap-3 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-0"
-            >
-              {galleryImages.map((image) => (
-                <button
-                  key={image.id}
-                  type="button"
-                  onClick={() => setSelectedImage(image)}
-                  className={`flex aspect-square cursor-pointer items-center justify-center overflow-hidden rounded-lg border bg-[#F8FAFD] transition ${
-                    selectedImage.id === image.id
-                      ? "border-[#F97316] ring-1 ring-[#F97316]"
-                      : "border-[#D7DFEA] hover:border-[#F97316]"
-                  }`}
-                >
-                  <img
-                    src={image.src}
-                    alt={image.alt}
-                    className={`h-full w-full object-contain p-2 ${
-                      image.tone === "dark"
-                        ? "grayscale brightness-50"
-                        : image.tone === "muted"
-                          ? "grayscale opacity-70"
-                          : ""
-                    }`}
-                  />
-                </button>
-              ))}
-            </div>
-
-            <button
-                type="button"
-              onClick={() =>
-                thumbnailRef.current?.scrollBy({
-                  left: 96,
-                  behavior: "smooth",
-                })
-              }
-              className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[#D7DFEA] bg-white text-[#64748B] transition hover:bg-[#F7F9FC] hover:text-[#F97316]"
-              aria-label="Scroll thumbnails right"
-            >
-              <ChevronRight size={18} />
-            </button>
-          </div>
-        </div>
-
-        <div className="pt-2">
-          <h3 className="text-xl font-bold text-[#03152B]">
-            {variant.product} - Standard ({variant.color})
-          </h3>
-
-          <dl className="mt-6 grid grid-cols-[130px_minmax(0,1fr)] gap-x-4 gap-y-4 text-sm">
-            <DetailRow label="Variant SKU" value={variant.sku} />
-            <DetailRow label="Product" value={variant.product} link />
-            <DetailRow label="Category" value="Running Shoes" link />
-            <DetailRow label="Brand" value={getBrandName(variant.product)} link />
-            <DetailRow label="Base Price (USD)" value={`$${Number(variant.price).toFixed(2)}`} />
-            {/* <DetailRow label="Created At" value="Aug 10, 2026 10:30 AM" />
-            <DetailRow label="Updated At" value="Aug 24, 2026 04:15 PM" /> */}
-          </dl>
-
-          <div className="mt-8">
-            <h4 className="text-base font-bold text-[#03152B]">Description</h4>
-            <p className="mt-3 max-w-xl text-sm leading-6 text-[#475569]">
-              {variant.description ||
-                `Standard version in ${variant.color}. Lightweight and responsive cushioning for everyday comfort.`}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <section className="mx-4 mt-2 overflow-hidden rounded-lg border border-[#D7DFEA] bg-white shadow-sm">
-        <div className="flex flex-col justify-between gap-3 border-b border-[#E5EAF1] p-4 sm:flex-row sm:items-center">
-          <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[#FFF7ED] text-[#F97316]">
-              <Boxes size={16} />
-            </span>
-            <h4 className="font-bold text-[#03152B]">Real Stock</h4>
-          </div>
-          <p className="text-sm font-semibold text-[#03152B]">
-            Total Stock:{" "}
-            <span className="text-[#15803D]">{totalStock} Pairs</span>
-          </p>
-        </div>
-
-        <div className="overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-0">
-          <table className="w-full min-w-[760px]">
-            <thead>
-              <tr className="border-b border-[#E5EAF1] bg-[#F8FAFD] text-left text-xs font-semibold text-[#64748B]">
-                <th className="px-4 py-3">Color</th>
-                <th className="px-4 py-3">Size (US)</th>
-                <th className="px-4 py-3">Price (USD)</th>
-                <th className="px-4 py-3">Stock Qty</th>
-                <th className="px-4 py-3">Low Stock Alert</th>
-                <th className="px-4 py-3">Stock Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stockRows.map((row) => (
-                <tr
-                  key={row.id}
-                  className="border-b border-[#EEF2F7] text-sm last:border-0 hover:bg-[#F8FAFD]"
-                >
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-3">
-                      <span className="h-4 w-4 rounded-full border border-[#CBD5E1] bg-white" />
-                      <span className="font-medium text-[#03152B]">
-                        {row.color}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 font-semibold text-[#03152B]">
-                    {row.size}
-                  </td>
-                  <td className="px-4 py-3 font-semibold text-[#03152B]">
-                    {row.price}
-                  </td>
-                  <td className="px-4 py-3 text-[#03152B]">{row.stock}</td>
-                  <td className="px-4 py-3 text-[#03152B]">{row.lowStock}</td>
-                  <td className="px-4 py-3">
-                    <StockBadge stock={row.stock} lowStock={row.lowStock} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <div className="flex justify-end px-4 py-5">
-        <Button type="button" variant="secondary" onClick={onClose} className="gap-2">
-          <X size={15} />
-          Close
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-function DetailRow({ label, value, link = false }) {
-  return (
-    <>
-      <dt className="font-semibold text-[#64748B]">{label}</dt>
-      <dd
-        className={`font-semibold ${
-          link ? "text-[#F97316]" : "text-[#03152B]"
-        }`}
-      >
-        {value}
-      </dd>
-    </>
-  );
-}
-
-function StockBadge({ stock, lowStock }) {
-  const isLow = stock <= lowStock * 4;
-
-  return (
-    <span
-      className={`inline-flex rounded-md px-2.5 py-1 text-xs font-semibold ${
-        isLow
-          ? "bg-orange-100 text-orange-600"
-          : "bg-[#DCFCE7] text-[#15803D]"
-      }`}
+  return createPortal(
+    <dialog
+      ref={dialogRef}
+      aria-labelledby={titleId}
+      aria-describedby={descriptionId}
+      aria-modal="true"
+      onKeyDown={handleKeyDown}
+      className={"product-stock-panel " + (closing ? "is-closing" : "")}
+      onCancel={(event) => { event.preventDefault(); requestClose(); }}
+      onClick={(event) => { if (event.target === event.currentTarget) requestClose(); }}
     >
-      {isLow ? "Low Stock" : "In Stock"}
-    </span>
+      <div className="flex h-full min-h-0 flex-col bg-white text-[#03152B]">
+        <header className="flex shrink-0 items-start justify-between gap-4 px-4 pb-4 pt-5 sm:px-6 sm:pt-6">
+          <div>
+            <h2 id={titleId} className="text-xl font-semibold sm:text-2xl">Product Stock Details</h2>
+            <p id={descriptionId} className="mt-1 text-sm leading-6 text-[#64748B]">View stock information by variant color and size.</p>
+          </div>
+          <button ref={closeRef} type="button" onClick={requestClose} aria-label="Close stock details" className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[#E5EAF1] bg-[#F8FAFC] text-[#64748B] transition hover:bg-[#FFF7ED] hover:text-[#EA6500] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F97316]">
+            <X size={21} />
+          </button>
+        </header>
+
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-5 sm:px-6">
+          <section aria-label="Product stock overview" className="grid items-center gap-5 py-3 xl:grid-cols-[minmax(280px,0.8fr)_minmax(0,2fr)]">
+            <div className="flex min-w-0 items-center gap-4">
+              <StockImage src={image} alt={product?.name || "Product"} className="h-24 w-24 sm:h-28 sm:w-28" />
+              <div className="min-w-0">
+                <h3 className="break-words text-lg font-semibold">{product?.name || "Product"}</h3>
+                <p className="mt-2 break-words text-sm text-[#64748B]">SKU: {product?.sku || "PRD-" + String(product?.id || 1).padStart(4, "0")}</p>
+                <p className="mt-1 text-sm text-[#64748B]">Category: {product?.category || "Uncategorized"}</p>
+                <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-[#64748B]">Status: <StatusBadge status={product?.status || "Draft"} /></div>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 2xl:grid-cols-5">
+              <StockStat icon={Boxes} label="Total Stock" value={totals.total} unit="pairs" tone="green" />
+              <StockStat icon={Palette} label="Total Variants" value={variants.length} unit="colors" tone="blue" />
+              <StockStat icon={Box} label="Total Sizes" value={totals.sizes} unit="sizes" tone="orange" />
+              <StockStat icon={TriangleAlert} label="Low Stock" value={totals.low} unit="sizes" tone="orange" />
+              <StockStat icon={Ban} label="Out of Stock" value={totals.out} unit="sizes" tone="red" />
+            </div>
+          </section>
+
+          <div className="mt-4 grid min-w-0 overflow-hidden rounded-lg border border-[#E5EAF1] lg:grid-cols-[260px_minmax(0,1fr)] xl:grid-cols-[290px_minmax(0,1fr)]">
+            <aside aria-label="Product variants" className="min-w-0 border-b border-[#E5EAF1] bg-[#FAFBFD] p-4 lg:border-b-0 lg:border-r">
+              <h3 className="mb-3 text-base font-semibold">Variants ({variants.length})</h3>
+              <div className="flex gap-2 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
+                {variants.map((item) => {
+                  const summary = summarizeStock(item.stocks);
+                  const active = selected?.id === item.id;
+                  return (
+                    <button key={item.id} type="button" aria-pressed={active} onClick={() => setSelectedId(item.id)} className={"flex w-56 shrink-0 cursor-pointer items-center gap-3 rounded-lg border p-3 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F97316] lg:w-full " + (active ? "border-[#F9B985] bg-[#FFF5EB]" : "border-[#EAEFF5] bg-white hover:border-[#CBD5E1]")}>
+                      <StockImage src={item.id === "black" ? image : undefined} alt={item.color + " variant"} className="h-16 w-16" />
+                      <div className="min-w-0 flex-1">
+                        <p className="flex items-center gap-2 text-sm font-semibold"><span className="h-3 w-3 shrink-0 rounded-full border border-black/10" style={{ backgroundColor: item.colorCode }} />{item.color}</p>
+                        <p className="mt-1 text-xs leading-5 text-[#64748B]"><span className="font-medium">{summary.total}</span> pairs / {summary.sizes} sizes</p>
+                      </div>
+                      <ChevronRight size={17} aria-hidden="true" className={active ? "text-[#EA6500]" : "text-[#94A3B8]"} />
+                    </button>
+                  );
+                })}
+              </div>
+              {!variants.length && <p className="text-sm text-[#64748B]">No variants added yet.</p>}
+            </aside>
+
+            <section aria-label="Selected variant stock" className="min-w-0 p-4 sm:p-5">
+              {selected ? <>
+                <div className="flex items-center gap-4">
+                  <StockImage key={selected.id} src={selected.id === "black" ? image : undefined} alt={selected.color + " variant"} className="h-20 w-24" />
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-lg font-semibold">{selected.color}</h3>
+                    <p className="mt-2 flex items-center gap-2 text-sm text-[#64748B]"><span className="h-5 w-5 rounded-full border border-[#D7DFEA]" style={{ backgroundColor: selected.colorCode }} />{selected.colorCode}</p>
+                  </div>
+                  <StatusBadge status={selected.status} />
+                </div>
+                <div className="mt-4 grid grid-cols-2 gap-3 xl:grid-cols-4">
+                  <StockStat icon={Box} label="Total Stock" value={current.total} unit="pairs" tone="green" />
+                  <StockStat icon={Database} label="Available Sizes" value={current.available} unit="sizes" tone="blue" />
+                  <StockStat icon={TriangleAlert} label="Low Stock Sizes" value={current.low} unit="sizes" tone="orange" />
+                  <StockStat icon={Ban} label="Out of Stock Sizes" value={current.out} unit="sizes" tone="red" />
+                </div>
+                <h4 className="mb-3 mt-5 text-base font-semibold">Stock by Size</h4>
+                <StockTable variant={selected} />
+              </> : <div className="flex min-h-64 flex-col items-center justify-center gap-3 text-center text-[#64748B]"><Boxes size={32} /><p>No stock information available.</p></div>}
+            </section>
+          </div>
+        </div>
+        <footer className="flex shrink-0 justify-end border-t border-[#EEF2F7] bg-white px-4 py-3 sm:px-6">
+          <Button type="button" variant="secondary" onClick={requestClose} className="gap-2"><X size={16} />Close</Button>
+        </footer>
+      </div>
+    </dialog>, document.body,
   );
-}
-
-function getBrandName(productName) {
-  if (typeof productName !== "string") return "Nike";
-
-  if (productName.includes("s")) return "Adidas";
-  if (productName.includes("RS-X")) return "Puma";
-
-  return "Nike";
 }

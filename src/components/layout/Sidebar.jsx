@@ -15,7 +15,8 @@ import {
   X,
 } from "lucide-react";
 import BrandLogo from "../ui/BrandLogo";
-
+import { useState } from "react";
+import { useAuth } from "../../features/auth/hooks/useAuth";
 const menuItems = [
   { label: "Dashboard", to: "/", icon: LayoutDashboard },
   { label: "Banner", to: "/banner", icon: Tags },
@@ -36,10 +37,21 @@ export default function Sidebar({
   onClose,
 }) {
   const navigate = useNavigate();
+  const [logOut, setLogOut] = useState(false);
+  const { logout } = useAuth();
 
   const handleLogout = async () => {
-    navigate("/login");
-    onClose?.();
+    if (logOut) return;
+    setLogOut(true);
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    } finally {
+      onClose?.();
+      navigate("/login", { replace: true });
+      setLogOut(false);
+    }
   };
 
   return (
@@ -98,7 +110,7 @@ export default function Sidebar({
             to="/settings"
             onClick={onClose}
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-lg px-3 py-2.5 text-xs font-medium transition ${
+              `flex items-center gap-3 rounded-lg px-3 py-2.5 text-md font-medium transition ${
                 isActive
                   ? "bg-[#F97316] text-white"
                   : "text-[#8FA2BD] hover:bg-white/10 hover:text-white"
@@ -111,15 +123,14 @@ export default function Sidebar({
           <button
             type="button"
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-xs font-medium text-[#8FA2BD] transition hover:bg-white/10 hover:text-white"
+            disabled={logOut}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-md font-medium text-[#ffffff] transition cursor-pointer bg-[#fa7110] hover:bg-[#d75f09] "
           >
             <LogOut size={17} />
-            Logout
+            {logOut ? "Logging out..." : "Logout"}
           </button>
         </div>
       </aside>
     </>
   );
 }
-
-

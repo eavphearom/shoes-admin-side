@@ -1,49 +1,16 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  ArrowLeft,
-  Eye,
-  EyeOff,
-  LockKeyhole,
-  Mail,
-} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
 
 import googleIcon from "../../../assets/google.png";
 import Button from "../../../components/ui/Button";
 import { useAuth } from "../hooks/useAuth";
-
-function AuthInput({
-  label,
-  icon: Icon,
-  type = "text",
-  rightControl,
-  className = "",
-  ...props
-}) {
-  return (
-    <div>
-      <label className="mb-2 block text-xs font-bold uppercase tracking-[0.14em] text-[#07182E]">
-        {label}
-      </label>
-
-      <div className="relative">
-        <Icon
-          size={17}
-          className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#94A3B8]"
-        />
-        <input
-          type={type}
-          className={`h-12 w-full rounded-xl border border-[#D7DFEA] bg-[#FBFCFE] pl-11 pr-4 text-sm font-semibold text-[#07182E] outline-none transition placeholder:font-medium placeholder:text-[#94A3B8] focus:border-[#F97316] focus:bg-white focus:ring-4 focus:ring-[#F97316]/10 ${rightControl ? "pr-11" : ""} ${className}`}
-          {...props}
-        />
-        {rightControl}
-      </div>
-    </div>
-  );
-}
+import AuthInput from "./AuthInput";
+import toast from "react-hot-toast";
 
 export default function LoginForm() {
-  const { login } = useAuth();
+  const [errors, setErrors] = useState({});
+  const { login, logout } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -62,21 +29,52 @@ export default function LoginForm() {
       ...prev,
       [name]: value,
     }));
+
+    // Clear the field error when the user starts correcting it.
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    e.preventDefault();
+    if (loading) return;
+    const validationErrors = {};
+    if (!form.email) {
+      validationErrors.email = "Email is required";
+    }
+    if (!form.password) {
+      validationErrors.password = "Password is required";
+    }
+    setErrors(validationErrors);
+    setError("");
+
+    if (Object.keys(validationErrors).length > 0) return;
+
+    setLoading(true);
 
     try {
-      setLoading(true);
-      setError("");
+      const user = await login(form);
 
-      await login(form);
+      if (user.role !== "ADMIN") {
+        try {
+          await logout();
+        } catch (err) {
+          console.error("Backend logout failed:", err);
+        }
 
-      navigate("/");
+        toast.error("You don't have permission to access the admin dashboard.");
+        return;
+      }
+
+      navigate("/", { replace: true });
     } catch (error) {
       setError(
-        error.response?.data?.message || "Login failed. Please try again.",
+        error.response?.data?.message ||
+          error.message ||
+          "Login failed. Please try again.",
       );
     } finally {
       setLoading(false);
@@ -85,13 +83,12 @@ export default function LoginForm() {
 
   return (
     <div className="w-full max-w-md">
-
-      <div className="mb-7 text-center">
+      <div className="mb-5 text-center">
         <p className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-[#E96400]">
           Welcome Back
         </p>
 
-        <h1 className="mt-4 text-3xl font-michroma font-bold text-[#07182E]">
+        <h1 className="mt-4 text-3xl font-michroma cursor-pointer font-bold text-[#07182E]">
           Sign in
         </h1>
 
@@ -126,7 +123,7 @@ export default function LoginForm() {
         <div className="h-px flex-1 bg-[#E5EAF1]" />
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} noValidate className="space-y-5">
         <AuthInput
           label="Email Address"
           icon={Mail}
@@ -135,6 +132,7 @@ export default function LoginForm() {
           placeholder="hello@goshoes.com"
           value={form.email}
           onChange={handleChange}
+          error={errors.email}
         />
 
         <AuthInput
@@ -145,6 +143,7 @@ export default function LoginForm() {
           placeholder="Enter your password"
           value={form.password}
           onChange={handleChange}
+          error={errors.password}
           rightControl={
             <button
               type="button"
@@ -161,7 +160,7 @@ export default function LoginForm() {
           <label className="flex cursor-pointer items-center gap-2 font-semibold text-[#64748B]">
             <input
               type="checkbox"
-              className="h-4 w-4 cursor-pointer rounded border-[#CBD5E1] text-[#F97316] focus:ring-[#F97316]"
+              className="h-4 w-4 cursor-pointer rounded border-[#ef9247] text-[#F97316] focus:ring-[#F97316]"
             />
             Remember me
           </label>
@@ -182,8 +181,6 @@ export default function LoginForm() {
           Sign In
         </Button>
       </form>
-
-     
     </div>
   );
 }

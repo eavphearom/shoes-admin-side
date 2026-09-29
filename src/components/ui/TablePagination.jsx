@@ -40,7 +40,7 @@ export default function TablePagination({
                 value={String(perPage)}
                 onChange={(event) => changePerPage(event.target.value)}
                 options={perPageOptions}
-                placeholder="10"
+                placeholder=""
               />
             </div>
           </div>
@@ -63,7 +63,7 @@ export default function TablePagination({
               className={`h-8 w-8 cursor-pointer rounded-lg text-sm font-semibold transition ${
                 page === pageNumber
                   ? "bg-[#ef6a2c] text-white"
-                  : "hover:bg-[#F1F5F9]"
+                  : "hover:bg-[#ef6a2c]"
               }`}
             >
               {pageNumber}

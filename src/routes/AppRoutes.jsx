@@ -1,9 +1,11 @@
-
 import { lazy, Suspense } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 
 // Layout
 import AdminLayout from "../components/layout/AdminLayout";
+import ProtectedRoute from "./ProtectedRoute";
+import { useAuth } from "../features/auth/hooks/useAuth";
+import Loading from "../components/ui/Loading";
 
 // import ProtectedRoute from "./ProtectedRoute";
 
@@ -20,45 +22,61 @@ const CustomerPage = lazy(() => import("../pages/CustomerPage"));
 const OrderPage = lazy(() => import("../pages/OrderPage"));
 const ProfilePage = lazy(() => import("../pages/ProfilePage"));
 const ProductPage = lazy(() => import("../pages/ProductPage"));
+const ProductCreatePage = lazy(() => import("../pages/ProductCreatePage"));
+const ProductEditPage = lazy(() => import("../pages/ProductEditPage"));
 const SizePage = lazy(() => import("../pages/SizePage"));
 const UserRolePage = lazy(() => import("../pages/UserRolePage"));
 const VariantPage = lazy(() => import("../pages/VariantPage"));
-
-export default function AppRoutes() {
+function PageSuspense() {
   return (
-    <Suspense
-      fallback={
-        <div className="flex min-h-screen items-center justify-center">
-          <p className="text-gray-500">Loading...</p>
-        </div>
-      }
-    >
-      <Routes>
-        {/* Public */}
-        <Route path="/login" element={<LoginPage />} />
-
-        {/* Protected */}
-        {/* <Route element={<ProtectedRoute />}> */}
-        <Route element={<AdminLayout />}>
-          <Route index element={<DashboardPage />} />
-
-          <Route path="/banner" element={<BannerPage />} />
-          <Route path="/category" element={<CategoryPage />} />
-          <Route path="/brand" element={<BrandPage />} />
-          <Route path="/color" element={<ColorPage />} />
-          <Route path="/size" element={<SizePage />} />
-          <Route path="/products" element={<ProductPage />} />
-          <Route path="/variants" element={<VariantPage />} />
-          <Route path="/orders" element={<OrderPage />} />
-          <Route path="/customers" element={<CustomerPage />} />
-          <Route path="/user-role" element={<UserRolePage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-        </Route>
-        {/* </Route> */}
-
-        {/* Not Found */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+    <Suspense fallback={<Loading overlay />}>
+      <Outlet />
     </Suspense>
+  );
+}
+export default function AppRoutes() {
+  const { user } = useAuth();
+  return (
+    <Routes>
+      {/* Public */}
+      <Route
+        path="/login"
+        element={
+          user?.role === "ADMIN" ? <Navigate to="/" replace /> : <LoginPage />
+        }
+      />
+
+      {/* Protected */}
+      <Route element={<ProtectedRoute />}>
+        <Route element={<AdminLayout />}>
+          <Route element={<PageSuspense />}>
+            <Route index element={<DashboardPage />} />
+            <Route path="/banner" element={<BannerPage />} />
+            <Route path="/category" element={<CategoryPage />} />
+            <Route path="/brand" element={<BrandPage />} />
+            <Route path="/color" element={<ColorPage />} />
+            <Route path="/size" element={<SizePage />} />
+            <Route path="/products" element={<ProductPage />} />
+            <Route path="/products/create" element={<ProductCreatePage />} />
+            <Route path="/products/:id/edit" element={<ProductEditPage />} />
+            <Route path="/variants" element={<VariantPage />} />
+            <Route path="/orders" element={<OrderPage />} />
+            <Route path="/customers" element={<CustomerPage />} />
+            <Route path="/user-role" element={<UserRolePage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+          </Route>
+        </Route>
+      </Route>
+
+      {/* Not Found */}
+      <Route
+        path="*"
+        element={
+          <Suspense fallback={<Loading />}>
+            <NotFoundPage />
+          </Suspense>
+        }
+      />
+    </Routes>
   );
 }

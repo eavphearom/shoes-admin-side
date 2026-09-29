@@ -4,12 +4,13 @@ import Select from "../../../components/ui/Select";
 import TablePagination from "../../../components/ui/TablePagination";
 
 export default function BannerList({
+  loading = false,
+  defaultOptions,
+  statusFilter,
+  onStatusFilter,
   banners,
   search,
   onSearch,
-  statusFilter,
-  onStatusFilter,
-  statusOptions,
   page,
   totalPages,
   totalItems,
@@ -45,8 +46,8 @@ export default function BannerList({
             <Select
               value={statusFilter}
               onChange={(e) => onStatusFilter(e.target.value)}
-              options={statusOptions}
-              placeholder="All Statuses"
+              options={defaultOptions}
+              placeholder=""
             />
           </div>
         </div>
@@ -56,17 +57,15 @@ export default function BannerList({
         <table className="w-full min-w-[860px]">
           <thead>
             <tr className="border-b border-[#E5EAF1] bg-[#F8FAFD] text-left text-[11px] font-semibold uppercase tracking-wide text-[#64748B]">
-              <th className="w-12 px-4 py-3">
+              {/* <th className="w-12 px-4 py-3">
                 <input type="checkbox" aria-label="Select all banners" />
-              </th>
-              <th className="w-16 px-4 py-3">#</th>
+              </th> */}
+              <th className="w-16 px-4 py-3">No</th>
               <th className="px-4 py-3">Image</th>
               <th className="px-4 py-3">Title</th>
-              <th className="px-4 py-3">Placement</th>
-              <th className="px-4 py-3">Link</th>
+              <th className="px-4 py-3">Sub Title</th>
               <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Created Date</th>
-              <th className="px-4 py-3 text-right">Actions</th>
+              <th className="px-4 py-3 text-end">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -75,32 +74,40 @@ export default function BannerList({
                 key={banner.id}
                 className="border-b border-[#EEF2F7] text-sm transition last:border-0 hover:bg-[#F8FAFD]"
               >
-                <td className="px-4 py-3">
-                  <input type="checkbox" aria-label={`Select ${banner.title}`} />
-                </td>
+                {/* <td className="px-4 py-3">
+                  <input
+                    type="checkbox"
+                    aria-label={`Select ${banner.title}`}
+                  />
+                </td> */}
                 <td className="px-4 py-3 text-[#64748B]">
                   {startIndex + index + 1}
                 </td>
                 <td className="px-4 py-3">
-                  <div className="flex h-12 w-20 items-center justify-center rounded-lg bg-[#FFF7ED] text-[#F97316]">
-                    <Image size={18} />
+                  <div className="flex h-12 w-20 items-center justify-center overflow-hidden rounded-lg bg-[#FFF7ED]">
+                    {banner.image ? (
+                      <img
+                        src={banner.image}
+                        alt={banner.title}
+                        className="h-full w-full object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <Image size={18} className="text-[#F97316]" />
+                    )}
                   </div>
                 </td>
                 <td className="px-4 py-3">
                   <p className="font-semibold text-[#03152B]">{banner.title}</p>
+                </td>
+                <td className="px-4 py-3 text-[#64748B]">
                   <p className="mt-1 max-w-xs truncate text-xs text-[#64748B]">
                     {banner.subtitle || "-"}
                   </p>
                 </td>
-                <td className="px-4 py-3 text-[#64748B]">
-                  {banner.placement}
-                </td>
-                <td className="px-4 py-3 text-[#64748B]">{banner.link || "-"}</td>
+
                 <td className="px-4 py-3">
-                  <StatusBadge status={banner.status} />
-                </td>
-                <td className="px-4 py-3 text-[#64748B]">
-                  {banner.createdAt}
+                  <StatusBadge isActive={banner.is_active} />
                 </td>
                 <td className="px-4 py-3">
                   <Actions item={banner} onEdit={onEdit} onDelete={onDelete} />
@@ -111,32 +118,32 @@ export default function BannerList({
         </table>
       </div>
 
-      <Footer
-        firstItem={firstItem}
-        lastItem={lastItem}
-        totalItems={totalItems}
-        label="banners"
-        page={page}
-        pages={pages}
-        totalPages={totalPages}
-        perPage={perPage}
-        onPageChange={onPageChange}
-        handlePerPageChange={handlePerPageChange}
-      />
+      {!loading && (
+        <Footer
+          firstItem={firstItem}
+          lastItem={lastItem}
+          totalItems={totalItems}
+          label="banners"
+          page={page}
+          pages={pages}
+          totalPages={totalPages}
+          perPage={perPage}
+          onPageChange={onPageChange}
+          handlePerPageChange={handlePerPageChange}
+        />
+      )}
     </div>
   );
 }
 
-function StatusBadge({ status }) {
+function StatusBadge({ isActive }) {
   return (
     <span
       className={`inline-flex rounded-md px-2 py-1 text-xs font-semibold ${
-        status === "Active"
-          ? "bg-[#DCFCE7] text-[#15803D]"
-          : "bg-[#F1F5F9] text-[#64748B]"
+        isActive ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"
       }`}
     >
-      {status}
+      {isActive ? "Active" : "Inactive"}
     </span>
   );
 }

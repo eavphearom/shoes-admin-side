@@ -1,87 +1,72 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import bannerService from "../services/bannerService";
+
+const defaultOptions = [
+  { value: "all", label: "All" },
+  { value: "true", label: "Active" },
+  { value: "false", label: "Inactive" },
+];
 
 export default function useBanners() {
+  const [banners, setBanners] = useState([]);
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("All Statuses");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
+  const [pagination, setPagination] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const [banners, setBanners] = useState([
-    {
-      id: 1,
-      title: "Summer Sneaker Drop",
-      subtitle: "Fresh arrivals for everyday comfort",
-      placement: "Homepage Hero",
-      link: "/products",
-      status: "Active",
-      image: null,
-      createdAt: "Sep 12, 2026",
-    },
-    {
-      id: 2,
-      title: "Running Essentials",
-      subtitle: "Performance shoes built for every mile",
-      placement: "Category Header",
-      link: "/category",
-      status: "Active",
-      image: null,
-      createdAt: "Sep 10, 2026",
-    },
-    {
-      id: 3,
-      title: "Clearance Sale",
-      subtitle: "Last pairs at special prices",
-      placement: "Promo Strip",
-      link: "/products",
-      status: "Inactive",
-      image: null,
-      createdAt: "Sep 01, 2026",
-    },
-  ]);
+  // create
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [creating, setCreating] = useState(false);
 
-  const statusOptions = [
-    { value: "All Statuses", label: "All Statuses" },
-    { value: "Active", label: "Active" },
-    { value: "Inactive", label: "Inactive" },
-  ];
+  useEffect(() => {
+    const controller = new AbortController();
 
-  const addBanner = (data) => {
-    const newBanner = {
-      id: Date.now(),
-      createdAt: "Today",
-      ...data,
+    const fetchBanners = async () => {
+      setLoading(true);
+      setError("");
+
+      try {
+        const params = {
+          pageNo: page,
+          perPage,
+          search: search.trim(),
+        };
+
+        // Only send the filter when a status is selected.
+        if (statusFilter !== "all") {
+          params.is_active = statusFilter === "true";
+        }
+
+        const response = await bannerService.getAll(params, controller.signal);
+
+        if (controller.signal.aborted) return;
+
+        // Convert the backend boolean into a UI status.
+        const items = (response.data ?? []).map((banner) => ({
+          ...banner,
+          status: banner.is_active ? "Active" : "Inactive",
+        }));
+
+        setBanners(items);
+        setPagination(response.pagination);
+      } catch (err) {
+        if (controller.signal.aborted) return;
+
+        setError(err.response?.data?.message || "Failed to load banners.");
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
+      }
     };
 
-    setBanners((prevBanners) => [newBanner, ...prevBanners]);
-  };
+    fetchBanners();
 
-  const updateBanner = (id, data) => {
-    setBanners((prevBanners) =>
-      prevBanners.map((banner) =>
-        banner.id === id ? { ...banner, ...data } : banner,
-      ),
-    );
-  };
-
-  const deleteBanner = (id) => {
-    setBanners((prevBanners) =>
-      prevBanners.filter((banner) => banner.id !== id),
-    );
-  };
-
-  const filteredBanners = banners.filter(
-    (banner) =>
-      (statusFilter === "All Statuses" || banner.status === statusFilter) &&
-      (banner.title.toLowerCase().includes(search.toLowerCase()) ||
-        banner.placement.toLowerCase().includes(search.toLowerCase())),
-  );
-
-  const totalPages = Math.ceil(filteredBanners.length / perPage);
-  const startIndex = (page - 1) * perPage;
-  const paginatedBanners = filteredBanners.slice(
-    startIndex,
-    startIndex + perPage,
-  );
+    return () => controller.abort();
+  }, [page, perPage, search, statusFilter, refreshKey]);
 
   const handleSearch = (value) => {
     setSearch(value);
@@ -98,22 +83,51 @@ export default function useBanners() {
     setPage(1);
   };
 
+  // create
+  const create = async (values) => {
+    setCreating(true);
+
+    try {
+      const formData = new FormData();
+
+      formData.append("title", values.title);
+      formData.append("subtitle", values.subtitle ?? "");
+      formData.append("is_active", String(values.is_active));
+      if (values.image instanceof File) {
+        formData.append("image", values.image);
+      }
+
+      const response = await bannerService.create(formData);
+
+      // Refresh the list after successful creation.
+      setPage(1);
+      setRefreshKey((prev) => prev + 1);
+
+      return response;
+    } finally {
+      setCreating(false);
+    }
+  };
+
   return {
-    banners: paginatedBanners,
-    search,
-    handleSearch,
+    banners,
+    defaultOptions,
     statusFilter,
-    handleStatusFilter,
-    statusOptions,
+    onStatusFilter: handleStatusFilter,
+    loading,
+    error,
+    search,
     page,
-    setPage,
-    totalPages,
-    totalItems: filteredBanners.length,
-    startIndex,
     perPage,
+    totalPages: pagination?.total_page ?? 0,
+    totalItems: pagination?.total ?? 0,
+    startIndex: (page - 1) * perPage,
+    onSearch: handleSearch,
+    onPageChange: setPage,
     handlePerPageChange,
-    addBanner,
-    updateBanner,
-    deleteBanner,
+
+    // create
+    create,
+    creating,
   };
 }

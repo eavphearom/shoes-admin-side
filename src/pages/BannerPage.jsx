@@ -6,6 +6,8 @@ import Modal from "../components/ui/Modal";
 import BannerForm from "../features/banners/components/BannerForm";
 import BannerList from "../features/banners/components/BannerList";
 import useBanners from "../features/banners/hooks/useBanners";
+import toast from "react-hot-toast";
+// import Loading from "@/components/ui/Loading";
 
 export default function BannerPage() {
   const data = useBanners();
@@ -32,9 +34,15 @@ export default function BannerPage() {
     setSelectedBanner(null);
   };
 
-  const handleCreate = (formData) => {
-    data.addBanner(formData);
-    setIsCreateOpen(false);
+  const handleCreate = async (formData) => {
+    try {
+      const response = await data.create(formData);
+      setIsCreateOpen(false);
+      toast.success(response.message || "Banner created successfully.");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to create Banner.");
+      console.error("Failed to create Banner:", error);
+    }
   };
 
   const handleUpdate = (formData) => {
@@ -63,7 +71,18 @@ export default function BannerPage() {
         </Button>
       </div>
 
-      <BannerList {...data} onEdit={handleEdit} onDelete={handleDelete} />
+      <div className="space-y-3">
+        {data.error && <p className="text-sm text-red-500">{data.error}</p>}
+
+        <BannerList {...data} onEdit={handleEdit} onDelete={handleDelete} />
+
+        {/* {data.loading && (
+          // <p className="text-center text-sm text-gray-500">
+          //   Loading banners...
+          // </p>
+          // <Loading overlay={false} />
+        )} */}
+      </div>
 
       <Modal
         isOpen={isCreateOpen}

@@ -12,6 +12,11 @@ export default function ProtectedRoute() {
   if (!user) {
     return <Navigate to="/login" replace />;
   }
+
+  // Logged in but not an admin
+  if (user.role !== "ADMIN") {
+    return <Navigate to="/login" replace />;
+  }
   // Render protected child route
   return <Outlet />;
 }

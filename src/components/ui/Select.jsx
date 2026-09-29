@@ -2,19 +2,22 @@ import { Check, ChevronDown } from "lucide-react";
 import { forwardRef, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
-const Select = forwardRef(function Select({
-  label,
-  options = [],
-  error,
-  placeholder = "Select option",
-  value,
-  defaultValue = "",
-  name,
-  onChange,
-  onBlur,
-  disabled = false,
-  className = "",
-}, ref) {
+const Select = forwardRef(function Select(
+  {
+    label,
+    options = [],
+    error,
+    placeholder = "Select option",
+    value,
+    defaultValue = "",
+    name,
+    onChange,
+    onBlur,
+    disabled = false,
+    className = "",
+  },
+  ref,
+) {
   const [isOpen, setIsOpen] = useState(false);
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [dropdownPosition, setDropdownPosition] = useState(null);
@@ -22,7 +25,9 @@ const Select = forwardRef(function Select({
   const dropdownRef = useRef(null);
   const labelId = useId();
   const currentValue = value ?? internalValue;
-  const selectedOption = options.find((option) => option.value === currentValue);
+  const selectedOption = options.find(
+    (option) => option.value === currentValue,
+  );
   const getOptionColor = (option) => option?.color || option?.colorCode;
 
   useEffect(() => {
@@ -54,9 +59,10 @@ const Select = forwardRef(function Select({
 
       const dropdownHeight = Math.min(240, (options.length + 1) * 38);
       const bottomSpace = window.innerHeight - rect.bottom;
-      const top = bottomSpace < dropdownHeight && rect.top > dropdownHeight
-        ? rect.top - dropdownHeight - 8
-        : rect.bottom + 8;
+      const top =
+        bottomSpace < dropdownHeight && rect.top > dropdownHeight
+          ? rect.top - dropdownHeight - 8
+          : rect.bottom + 8;
 
       setDropdownPosition({
         top,
@@ -131,7 +137,9 @@ const Select = forwardRef(function Select({
               style={{ backgroundColor: getOptionColor(selectedOption) }}
             />
           )}
-          <span className="truncate">{selectedOption?.label || placeholder}</span>
+          <span className="truncate">
+            {selectedOption?.label || placeholder}
+          </span>
         </span>
         <ChevronDown
           size={16}
@@ -144,60 +152,60 @@ const Select = forwardRef(function Select({
       {isOpen &&
         dropdownPosition &&
         createPortal(
-        <div
-          ref={dropdownRef}
-          className="fixed z-[9999] max-h-60 overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden rounded-lg border border-[#D7DFEA] bg-white shadow-lg animate-[dropdownIn_160ms_cubic-bezier(0.16,1,0.3,1)]"
-          style={{
-            top: dropdownPosition.top,
-            left: dropdownPosition.left,
-            width: dropdownPosition.width,
-          }}
-        >
-          <button
-            type="button"
-            onClick={() => handleSelect("")}
-            className="flex w-full items-center justify-between px-3 py-2 text-left text-sm text-[#8A98AA] transition hover:bg-[#F7F9FC]"
+          <div
+            ref={dropdownRef}
+            className="fixed z-[9999] max-h-60 overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden rounded-lg border border-[#D7DFEA] bg-white shadow-lg animate-[dropdownIn_160ms_cubic-bezier(0.16,1,0.3,1)]"
+            style={{
+              top: dropdownPosition.top,
+              left: dropdownPosition.left,
+              width: dropdownPosition.width,
+            }}
           >
-            {placeholder}
-            {!currentValue && <Check size={15} className="text-[#F97316]" />}
-          </button>
-
-          {options.map((option) => {
-            const isSelected = option.value === currentValue;
-
-            return (
+            {placeholder && (
               <button
-                key={option.value}
                 type="button"
-                onClick={() => handleSelect(option.value)}
-                className={`flex w-full items-center justify-between px-3 py-2 text-left text-sm transition ${
-                  isSelected
-                    ? "bg-[#FFF7ED] text-[#F97316]"
-                    : "text-[#03152B] hover:bg-[#F7F9FC]"
-                }`}
+                onClick={() => handleSelect("")}
+                className="flex w-full items-center justify-between px-3 py-2 text-left text-sm text-[#8A98AA] transition hover:bg-[#F7F9FC]"
               >
-                <span className="flex min-w-0 items-center gap-2">
-                  {getOptionColor(option) && (
-                    <span
-                      className="h-3.5 w-3.5 shrink-0 rounded-full border border-[#D7DFEA]"
-                      style={{ backgroundColor: getOptionColor(option) }}
-                    />
-                  )}
-                  <span className="truncate">{option.label}</span>
-                </span>
-                {isSelected && <Check size={15} />}
+                {placeholder}
+                {!currentValue && (
+                  <Check size={15} className="text-[#F97316]" />
+                )}
               </button>
-            );
-          })}
-        </div>,
-        document.body,
-      )}
+            )}
 
-      {error && (
-        <p className="mt-1 text-sm text-red-500">
-          {error}
-        </p>
-      )}
+            {options.map((option) => {
+              const isSelected = option.value === currentValue;
+
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => handleSelect(option.value)}
+                  className={`flex w-full items-center justify-between px-3 py-2 text-left text-sm transition ${
+                    isSelected
+                      ? "bg-[#FFF7ED] text-[#F97316]"
+                      : "text-[#03152B] hover:bg-[#F7F9FC]"
+                  }`}
+                >
+                  <span className="flex min-w-0 items-center gap-2">
+                    {getOptionColor(option) && (
+                      <span
+                        className="h-3.5 w-3.5 shrink-0 rounded-full border border-[#D7DFEA]"
+                        style={{ backgroundColor: getOptionColor(option) }}
+                      />
+                    )}
+                    <span className="truncate">{option.label}</span>
+                  </span>
+                  {isSelected && <Check size={15} />}
+                </button>
+              );
+            })}
+          </div>,
+          document.body,
+        )}
+
+      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
     </div>
   );
 });
